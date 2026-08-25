@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Theme tokens — docs/design-plan.md §1 and §2.
+   No arbitrary colour values in components; everything routes through these.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-ink: #1b0f13;
+  --color-ink-2: #2a1820;
+  --color-crimson: #8c2331;
+  --color-gold: #be9b4d;
+  --color-emerald: #1e5c4c;
+  --color-magenta: #9c2a5e;
+  --color-ivory: #efe7d8;
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    /* Single committed dark design — no toggle (CLAUDE.md non-goal). */
+    color-scheme: dark;
+  }
+
+  html {
+    background-color: var(--color-ink);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-ivory);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* Visible keyboard focus on every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+}
+
+@layer components {
+  /* Type scale — docs/design-plan.md §2. */
+  .type-hero {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 8vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+  }
+
+  .type-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.05;
+    text-wrap: balance;
+    font-variation-settings: "SOFT" 30, "WONK" 1;
+  }
+
+  .type-card-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .type-body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    max-width: 65ch;
+  }
+
+  .type-cta {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+
+  /* The one place letter-spacing is used — a small label, not a heading. */
+  .type-meta {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+  }
+
+  .type-data {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Layout wrapper — 375px first. */
+  .wrap {
+    width: 100%;
+    max-width: 68rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .wrap {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* The gold hairline seam that stitches one colour panel to the next. */
+  .seam {
+    border-top: 1px solid var(--color-gold);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
