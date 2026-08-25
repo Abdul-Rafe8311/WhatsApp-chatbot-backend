@@ -1,0 +1,150 @@
+"""Salon knowledge base and environment configuration.
+
+Everything the bot is allowed to say about the salon lives here. The LLM adapter
+injects this into the system prompt and is told never to invent anything outside it.
+"""
+
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Final
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_DIR: Final[Path] = Path(__file__).resolve().parent.parent
+DATA_DIR: Final[Path] = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+BOOKINGS_XLSX: Final[Path] = DATA_DIR / "bookings.xlsx"
+BOOKINGS_CSV_FALLBACK: Final[Path] = DATA_DIR / "bookings_fallback.csv"
+
+
+# Canonical booking columns, shared by the Excel writer and the Google Sheet mirror.
+BOOKING_HEADERS: Final[list[str]] = [
+    "Booking ID",
+    "Received At",
+    "Customer Name",
+    "WhatsApp Number",
+    "Service",
+    "Requested Date",
+    "Requested Time",
+    "Status",
+    "Notes",
+]
+BOOKING_STATUSES: Final[list[str]] = ["Pending", "Confirmed", "Cancelled"]
+
+
+# --------------------------------------------------------------------------- #
+# Salon knowledge base
+# --------------------------------------------------------------------------- #
+@dataclass(frozen=True)
+class Service:
+    name: str
+    price_pkr: int
+    duration_min: int
+    aliases: tuple[str, ...] = field(default_factory=tuple)
+
+
+SERVICES: Final[tuple[Service, ...]] = (
+    Service("Haircut", 1500, 45, ("haircut", "hair cut", "cut", "baal", "baal katwana", "hair")),
+    Service("Hair Color", 6000, 120, ("color", "colour", "hair color", "hair colour", "dye", "rang")),
+    Service("Blow Dry", 2000, 40, ("blow dry", "blowdry", "blow-dry", "styling")),
+    Service("Facial", 3500, 60, ("facial", "face", "clean up", "cleanup", "chehra")),
+    Service("Manicure", 2500, 45, ("manicure", "mani", "nails", "nakhun")),
+    Service("Pedicure", 3000, 60, ("pedicure", "pedi", "feet", "paon")),
+    Service("Threading", 500, 15, ("threading", "thread", "eyebrows", "brows", "abru")),
+    Service("Waxing", 4000, 60, ("waxing", "wax")),
+    Service("Bridal Makeup", 35000, 180, ("bridal", "bridal makeup", "dulhan", "shadi", "wedding")),
+    Service("Party Makeup", 12000, 90, ("party makeup", "party", "makeup", "make up", "mekap")),
+    Service("Hair Spa", 4500, 75, ("hair spa", "spa", "treatment", "keratin")),
+)
+
+SALON_NAME: Final[str] = os.getenv("SALON_NAME") or "GlowDesk Beauty Salon"
+SALON_ADDRESS: Final[str] = (
+    os.getenv("SALON_ADDRESS")
+    or "Shop 12, Ground Floor, Gulberg Galleria, Main Boulevard, Gulberg III, Lahore"
+)
+SALON_PHONE: Final[str] = os.getenv("SALON_PHONE") or "+92 300 1234567"
+SALON_HOURS: Final[str] = "Monday to Saturday 11:00 AM - 9:00 PM. Sunday closed."
+SALON_PAYMENT: Final[str] = "Cash, debit/credit card, and JazzCash or Easypaisa transfer."
+SALON_PARKING: Final[str] = "Free covered basement parking for customers, entrance from Main Boulevard."
+SALON_EXTRAS: Final[str] = (
+    "Walk-ins welcome but appointments get priority. Ladies only. "
+    "Bridal bookings need 50% advance."
+)
+
+
+def services_block() -> str:
+    """Human-readable price list used inside the system prompt."""
+    return "\n".join(
+        f"- {s.name}: PKR {s.price_pkr:,} ({s.duration_min} min)" for s in SERVICES
+    )
+
+
+def service_names() -> list[str]:
+    return [s.name for s in SERVICES]
+
+
+def find_service(text: str) -> str | None:
+    """Match free text against the service catalogue. Longest alias wins."""
+    low = text.lower()
+    best: tuple[int, str] | None = None
+    for svc in SERVICES:
+        for alias in (svc.name.lower(), *svc.aliases):
+            if alias in low and (best is None or len(alias) > best[0]):
+                best = (len(alias), svc.name)
+    return best[1] if best else None
+
+
+def service_by_name(name: str) -> Service | None:
+    for svc in SERVICES:
+        if svc.name.lower() == (name or "").lower():
+            return svc
+    return None
+
+
+KNOWLEDGE_BASE: Final[str] = f"""\
+Salon name: {SALON_NAME}
+Address: {SALON_ADDRESS}
+Phone: {SALON_PHONE}
+Opening hours: {SALON_HOURS}
+Payment methods: {SALON_PAYMENT}
+Parking: {SALON_PARKING}
+Other: {SALON_EXTRAS}
+
+Services and prices (PKR):
+{services_block()}
+"""
+
+
+# --------------------------------------------------------------------------- #
+# Environment
+# --------------------------------------------------------------------------- #
+WHATSAPP_TOKEN: Final[str] = os.getenv("WHATSAPP_TOKEN", "").strip()
+WHATSAPP_PHONE_NUMBER_ID: Final[str] = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "").strip()
+WHATSAPP_APP_SECRET: Final[str] = os.getenv("WHATSAPP_APP_SECRET", "").strip()
+WHATSAPP_VERIFY_TOKEN: Final[str] = os.getenv("WHATSAPP_VERIFY_TOKEN", "").strip() or "glowdesk-verify"
+WHATSAPP_API_VERSION: Final[str] = os.getenv("WHATSAPP_API_VERSION", "").strip() or "v21.0"
+
+LLM_PROVIDER: Final[str] = os.getenv("LLM_PROVIDER", "mock").strip().lower() or "mock"
+LLM_API_KEY: Final[str] = os.getenv("LLM_API_KEY", "").strip()
+LLM_MODEL: Final[str] = os.getenv("LLM_MODEL", "").strip()
+
+GOOGLE_SHEETS_CREDENTIALS_FILE: Final[str] = os.getenv("GOOGLE_SHEETS_CREDENTIALS_FILE", "").strip()
+GOOGLE_SHEET_ID: Final[str] = os.getenv("GOOGLE_SHEET_ID", "").strip()
+GOOGLE_SHEET_TAB: Final[str] = os.getenv("GOOGLE_SHEET_TAB", "").strip() or "Bookings"
+
+SESSION_TTL_SECONDS: Final[int] = int(os.getenv("SESSION_TTL_SECONDS") or 3600)
+DEDUPE_TTL_SECONDS: Final[int] = int(os.getenv("DEDUPE_TTL_SECONDS") or 600)
+
+
+def whatsapp_configured() -> bool:
+    return bool(WHATSAPP_TOKEN and WHATSAPP_PHONE_NUMBER_ID)
+
+
+def sheets_configured() -> bool:
+    return bool(GOOGLE_SHEETS_CREDENTIALS_FILE and GOOGLE_SHEET_ID)

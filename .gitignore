@@ -1,0 +1,36 @@
+# Secrets — NEVER commit
+.env
+.env.local
+*.pem
+
+# Google service-account credentials
+credentials/
+*credentials*.json
+*service-account*.json
+client_secret*.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Virtualenvs
+venv/
+.venv/
+env/
+
+# Customer data — bookings.xlsx holds real names and phone numbers
+data/
+*.tmp.xlsx
+*.xlsx
+!docs/*.xlsx
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

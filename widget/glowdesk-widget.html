@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GlowDesk Chat Widget</title>
+<style>
+  :root {
+    --wa-green: #25D366;
+    --wa-header: #075E54;
+    --wa-log: #ECE5DD;
+    --wa-own: #DCF8C6;
+    --wa-bot: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #f4f4f4;
+  }
+  /* ---- demo page chrome (delete when embedding) ---- */
+  .demo {
+    max-width: 640px; margin: 80px auto; padding: 0 24px; color: #333;
+  }
+  .demo h1 { color: var(--wa-header); }
+
+  /* ---- floating button ---- */
+  #gd-launcher {
+    position: fixed; right: 24px; bottom: 24px; z-index: 9999;
+    width: 60px; height: 60px; border: none; border-radius: 50%;
+    background: var(--wa-green); color: #fff; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,.28);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .18s ease;
+  }
+  #gd-launcher:hover { transform: scale(1.07); }
+  #gd-launcher svg { width: 32px; height: 32px; fill: #fff; }
+
+  /* ---- panel ---- */
+  #gd-panel {
+    position: fixed; right: 24px; bottom: 96px; z-index: 9999;
+    width: 350px; max-width: calc(100vw - 32px);
+    height: 500px; max-height: calc(100vh - 130px);
+    background: var(--wa-log); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 10px 34px rgba(0,0,0,.3);
+    display: none; flex-direction: column;
+  }
+  #gd-panel.gd-open { display: flex; }
+
+  #gd-header {
+    background: var(--wa-header); color: #fff;
+    padding: 12px 14px; display: flex; align-items: center; gap: 10px;
+  }
+  #gd-avatar {
+    width: 38px; height: 38px; border-radius: 50%; background: #128C7E;
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  #gd-title { font-size: 15px; font-weight: 600; line-height: 1.2; }
+  #gd-sub { font-size: 11.5px; opacity: .8; }
+  #gd-header-actions { margin-left: auto; display: flex; gap: 6px; }
+  #gd-header button {
+    background: transparent; border: none; color: #fff; cursor: pointer;
+    font-size: 13px; opacity: .85; padding: 4px 6px; border-radius: 4px;
+  }
+  #gd-header button:hover { opacity: 1; background: rgba(255,255,255,.12); }
+
+  #gd-log {
+    flex: 1; overflow-y: auto; padding: 14px 12px;
+    background: var(--wa-log);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .gd-msg {
+    max-width: 80%; padding: 7px 10px; border-radius: 8px; font-size: 14px;
+    line-height: 1.4; white-space: pre-wrap; word-wrap: break-word;
+    box-shadow: 0 1px 1px rgba(0,0,0,.13);
+  }
+  .gd-bot  { background: var(--wa-bot); align-self: flex-start; border-top-left-radius: 2px; }
+  .gd-user { background: var(--wa-own); align-self: flex-end;  border-top-right-radius: 2px; }
+  .gd-err  { background: #FFD7D7; color: #8B1E1E; align-self: flex-start; }
+  .gd-time { display: block; font-size: 10px; color: #667; text-align: right; margin-top: 2px; }
+  .gd-typing span {
+    display: inline-block; width: 6px; height: 6px; margin-right: 3px;
+    background: #999; border-radius: 50%; animation: gd-blink 1.2s infinite;
+  }
+  .gd-typing span:nth-child(2) { animation-delay: .2s; }
+  .gd-typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes gd-blink { 0%,60%,100% { opacity: .25 } 30% { opacity: 1 } }
+
+  #gd-input-row {
+    display: flex; gap: 8px; padding: 9px; background: #F0F0F0;
+  }
+  #gd-input {
+    flex: 1; border: none; border-radius: 20px; padding: 10px 14px;
+    font-size: 14px; outline: none;
+  }
+  #gd-send {
+    border: none; background: var(--wa-green); color: #fff; cursor: pointer;
+    width: 40px; height: 40px; border-radius: 50%; font-size: 16px;
+  }
+  #gd-send:disabled { opacity: .5; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<div class="demo">
+  <h1>GlowDesk Beauty Salon</h1>
+  <p>Demo page. The floating green button in the bottom-right opens the chat widget.
+     Try: <em>"what are your timings"</em>, <em>"kitna charge hai facial ka"</em>,
+     <em>"book a facial"</em>.</p>
+</div>
+
+<!-- ================= widget: copy from here ================= -->
+<button id="gd-launcher" aria-label="Chat with us">
+  <svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+</button>
+
+<div id="gd-panel" role="dialog" aria-label="Salon chat">
+  <div id="gd-header">
+    <div id="gd-avatar">GD</div>
+    <div>
+      <div id="gd-title">GlowDesk Salon</div>
+      <div id="gd-sub">Typically replies instantly</div>
+    </div>
+    <div id="gd-header-actions">
+      <button id="gd-reset" title="Start a new conversation">Reset</button>
+      <button id="gd-close" title="Close">&#10005;</button>
+    </div>
+  </div>
+  <div id="gd-log"></div>
+  <div id="gd-input-row">
+    <input id="gd-input" type="text" placeholder="Type a message" autocomplete="off" />
+    <button id="gd-send" aria-label="Send">&#10148;</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Change this one line to point the widget at your backend.
+  const API_BASE = "http://127.0.0.1:8000";
+
+  const SESSION_KEY = "glowdesk_session_id";
+  const launcher = document.getElementById("gd-launcher");
+  const panel    = document.getElementById("gd-panel");
+  const log      = document.getElementById("gd-log");
+  const input    = document.getElementById("gd-input");
+  const sendBtn  = document.getElementById("gd-send");
+
+  let sessionId = null;
+  let greeted   = false;
+  let busy      = false;
+
+  try { sessionId = sessionStorage.getItem(SESSION_KEY); } catch (e) { sessionId = null; }
+
+  function storeSession(id) {
+    sessionId = id;
+    try { sessionStorage.setItem(SESSION_KEY, id); } catch (e) { /* private mode */ }
+  }
+
+  function clock() {
+    const d = new Date();
+    return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+  }
+
+  function addMessage(text, cls) {
+    const el = document.createElement("div");
+    el.className = "gd-msg " + cls;
+    el.textContent = text;
+    const t = document.createElement("span");
+    t.className = "gd-time";
+    t.textContent = clock();
+    el.appendChild(t);
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    return el;
+  }
+
+  function showTyping() {
+    const el = document.createElement("div");
+    el.className = "gd-msg gd-bot gd-typing";
+    el.innerHTML = "<span></span><span></span><span></span>";
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    return el;
+  }
+
+  function setBusy(state) {
+    busy = state;
+    sendBtn.disabled = state;
+  }
+
+  async function send(text) {
+    if (!text || busy) return;
+    addMessage(text, "gd-user");
+    input.value = "";
+    setBusy(true);
+    const typing = showTyping();
+
+    try {
+      const res = await fetch(API_BASE + "/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, session_id: sessionId })
+      });
+      typing.remove();
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (data.session_id) storeSession(data.session_id);
+      addMessage(data.reply || "…", "gd-bot");
+    } catch (err) {
+      typing.remove();
+      addMessage("Could not reach the salon right now. Please try again in a moment.", "gd-err");
+      console.error("[GlowDesk]", err);
+    } finally {
+      setBusy(false);
+      input.focus();
+    }
+  }
+
+  function greet() {
+    if (greeted) return;
+    greeted = true;
+    addMessage(
+      "Hi! Welcome to GlowDesk Beauty Salon. Ask me about services, prices or timings — or say \"book a facial\".",
+      "gd-bot"
+    );
+  }
+
+  launcher.addEventListener("click", function () {
+    panel.classList.toggle("gd-open");
+    if (panel.classList.contains("gd-open")) { greet(); input.focus(); }
+  });
+
+  document.getElementById("gd-close").addEventListener("click", function () {
+    panel.classList.remove("gd-open");
+  });
+
+  document.getElementById("gd-reset").addEventListener("click", async function () {
+    const old = sessionId;
+    log.innerHTML = "";
+    greeted = false;
+    sessionId = null;
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+    try {
+      await fetch(API_BASE + "/api/chat/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: old })
+      });
+    } catch (e) { console.error("[GlowDesk] reset failed", e); }
+    greet();
+  });
+
+  sendBtn.addEventListener("click", function () { send(input.value.trim()); });
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); send(input.value.trim()); }
+  });
+})();
+</script>
+<!-- ================= widget: copy to here ================= -->
+
+</body>
+</html>
