@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { About } from "@/components/About";
 import { Hero } from "@/components/Hero";
+import { HoursLocation } from "@/components/HoursLocation";
 import { Services } from "@/components/Services";
 import { copy } from "@/config/copy";
 
@@ -25,6 +26,7 @@ export const SECTIONS: Section[] = [
   { id: "hero", navLabel: null, Component: Hero },
   { id: "services", navLabel: copy.nav.services, Component: Services },
   { id: "about", navLabel: copy.nav.about, Component: About },
+  { id: "hours", navLabel: copy.nav.hours, Component: HoursLocation },
 ];
 
 /** Nav items for the sections that actually render. Never hand-maintained. */

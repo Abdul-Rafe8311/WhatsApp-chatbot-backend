@@ -39,6 +39,9 @@ export const copy = {
      */
     serviceAriaLabel: (serviceName: string) =>
       `Book ${serviceName} on WhatsApp`,
+    /** Hours section: the question that section exists to answer. */
+    hoursPrefill:
+      "Assalam o Alaikum, I would like to ask about your timings",
   },
 
   services: {
@@ -55,6 +58,32 @@ export const copy = {
 
   about: {
     heading: "About",
+  },
+
+  hours: {
+    heading: "Hours & Location",
+    /**
+     * hours.verified is false, so no schedule renders. Written as an
+     * invitation rather than an apology: messaging genuinely is how you get
+     * a straight answer about a specific day, which is the whole product.
+     */
+    unverifiedLead: "Call to confirm timings",
+    unverifiedNote:
+      "Timings shift through wedding season, and bridal bookings are taken by appointment. Message us and we will tell you exactly when we are free.",
+    /** Only reachable once hours.verified flips to true. */
+    closedLabel: "Closed",
+  },
+
+  location: {
+    mapsLabel: "Open in Maps",
+    /**
+     * Derived from the address in salon.ts rather than stored — there is no
+     * confirmed maps URL, and a search link built from the real address is
+     * honest where a hand-pasted pin would be a guess.
+     */
+    mapsUrl: (address: string) =>
+      "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(address),
   },
 
   footer: {
