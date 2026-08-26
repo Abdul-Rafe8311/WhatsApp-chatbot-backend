@@ -1,3 +1,4 @@
+import { SalonImage } from "@/components/SalonImage";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
@@ -83,10 +84,14 @@ export function HoursLocation({ id }: { id: string }) {
         </div>
       </div>
 
-      {/* Future map or storefront. 16:9 and full width — the only landscape
-          field on the page, which is what makes it close the section. */}
-      <div className="wrap pt-12 pb-16 sm:pb-20">
-        <div className="aspect-[16/9] w-full bg-crimson" />
+      {/* Storefront or map. The only landscape image on the page, which is
+          what lets it close the section. */}
+      <div className="wrap pt-12 pb-16 sm:pb-24">
+        <SalonImage
+          src={salon.info.locationImage}
+          alt={salon.info.locationImageAlt}
+          ratio="16:9"
+        />
       </div>
     </section>
   );

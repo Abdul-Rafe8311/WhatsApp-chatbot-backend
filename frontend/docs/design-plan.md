@@ -1,8 +1,133 @@
 # Design plan — Sonia's Makeup Salon
 
-Status: **proposal, not built.** No component or page code depends on this yet.
-`globals.css` currently has placeholder tokens; nothing below is wired in until
-you approve it.
+Status: **built, then revised.** Revision 2 below supersedes the colour,
+image-slot, CTA-count, signature and services decisions in the original plan.
+The original reasoning is retained deliberately — the arguments that turned
+out to be wrong are the useful part.
+
+---
+
+# Revision 2 — near-neutral
+
+Recorded after reviewing the built site. Revision 1's palette and repetition
+were wrong in ways that only showed once the whole page existed. The original
+reasoning is left below rather than deleted, because the arguments that were
+wrong are worth keeping visible.
+
+## R2.1 — One ground, near-neutral
+
+**Was:** `crimson`, `emerald` and `magenta` rotating as full-bleed section
+grounds, on the argument that the page should read as "a sequence of fabric
+panels".
+
+**Is:** a single near-black ground (`ink` `#170E11`, warmed very slightly from
+`#1B0F13`), `ivory` text, `gold` as the only accent. `ink-2` and `ink-3` are
+tonal steps for surfaces and image placeholders. Crimson, emerald and magenta
+are **removed from the theme entirely**.
+
+**Why the original argument failed.** It was reasoning about fabric, not about
+a screen with photographs on it. In practice the emerald services panel with
+dark maroon squares on it read as a default dark theme with broken images —
+the exact generic look the plan set out to avoid.
+
+The decisive fact is one the first plan noted and then ignored: **this salon's
+own imagery is already extremely saturated.** Crimson lehengas, emerald and
+magenta mehndi, kundan gold. When the site's chrome competes with that, the
+result is noise. When the chrome goes quiet, the photographs become the only
+colour on the page and it reads as expensive. The jewel tones still arrive —
+they arrive in the pictures, which is where they were always going to be
+better than in a CSS token.
+
+Sections now separate by **spacing and the gold hairline seam**, never by
+changing colour. Distinction between sections is carried by layout and rhythm,
+which revision 1 already got right.
+
+`gold` is deliberately **rationed**: hairline seams, small labels, prices,
+the three CTA borders, the wordmark apostrophe. It should feel scarce. Nothing
+is filled with it.
+
+## R2.2 — Image slots, not colour fields
+
+**Was:** solid saturated rectangles at correct aspect ratios, on the argument
+that a colour block "belongs in the composition" where a grey box does not.
+
+**Is:** `<SalonImage>` — one component taking `src`, `alt` and `ratio`. With
+no `src` it renders a tonal panel one step off the ground (`ink-2` with a
+`gold/12` inset hairline).
+
+**Why.** Half the original argument held: a grey box with an icon is worse.
+But a flat saturated rectangle reads as a *failed image load*, and seven of
+them read as a broken page. The placeholder has to recede rather than
+announce itself — close enough to the ground to look like deliberate space,
+distinct enough to hold the composition.
+
+The aspect box lives on the wrapper, so a real photograph replaces a
+placeholder with zero layout shift and no redesign. Paths live in
+`salon.ts` as `null` until files land — the same never-render-from-a-null
+discipline as prices and hours.
+
+## R2.3 — Three prominent CTAs, not sixteen
+
+**Was:** every one of thirteen services carried its own outlined pill, plus
+hero, hours and sticky.
+
+**Is:** the pill appears in exactly **three** places — hero, hours, sticky.
+Service names are themselves the WhatsApp link, styled recessively.
+
+**Why.** Thirteen identical outlined pills was the single loudest signal that
+the page was generated. Real sites do not ask sixteen times, and repetition
+at that volume reads as a template regardless of how good the individual
+element is.
+
+Nothing was lost behaviourally. `<WhatsAppLink>` is the headless gate; the
+pill is `<WhatsAppCTA>` wrapping it. Every service still opens WhatsApp with
+its own prefill and its own accessible name, still inert while
+`isDemoNumber` is true. On a bridal card the heading wraps the link and a
+stretched pseudo-element covers the card, so the whole card is the target
+while the markup stays valid — a `<button>` may not contain a heading.
+
+## R2.4 — No seal on buttons
+
+**Was:** the signature was "the seal inside a gold-hairline pill", on the
+argument that a bare mark could not tell a bride what tapping did.
+
+**Is:** the pill carries **plain type**. The seal appears only in the
+wordmark, and standing alone in the header and footer.
+
+**Why.** The label was the right half of that fix; the seal was not. At pill
+size, beside a word, a raised apostrophe reads as a stray comma rather than a
+mark — punctuation that has come loose. It needs the word it belongs to. In
+the wordmark it is unmistakably part of "Sonia's"; next to "Book on WhatsApp"
+it is debris.
+
+The signature is therefore now **the raised gold apostrophe in the wordmark
+itself** — carved-sign detail, gold, appearing twice on the page. Rationed,
+like the rest of the gold.
+
+## R2.5 — Services reflects what the salon sells
+
+**Was:** thirteen structurally identical cards in a uniform grid.
+
+**Is:** two tiers.
+
+- **The four wedding days** — Mehndi, Nikah, Barat, Walima — as large cards
+  with 4:5 photographs, full titles and room around them.
+- **Everything else** — Engagement beneath the cards, then Hair, Party and
+  Skin as dense name-and-price rows in three columns.
+
+**Why.** Thirteen identical cards is a catalogue, not a design, and it told
+the visitor that Waxing matters as much as Barat. It does not. The bridal
+four are the business; the rest is a real menu that people do book, and it
+should be legible without pretending to be the headline.
+
+Party is a single service and would look stranded as its own stacked block,
+so the compact groups sit side by side rather than running down the page.
+
+Selection is data-driven — `category === "Bridal" && featured` — so the tiers
+follow the config rather than a hardcoded list. `CATEGORY_ORDER` and array
+order are still authoritative; the four days are lifted out, never re-sorted.
+
+---
 
 ## What the config actually says
 

@@ -47,6 +47,18 @@ export const salon = {
       "Trained by Kashee's Official and Amina Raja Makeup Studio", // CONFIRMED
     ],
 
+    /**
+     * Section imagery. Null renders <SalonImage>'s quiet placeholder — never
+     * a broken <img>. Drop a file in public/images/ and set the path here;
+     * alt text is required alongside it. See docs/design-plan.md §5.
+     */
+    heroImage: null as string | null,          // TODO: /images/hero-bridal.webp
+    heroImageAlt: null as string | null,
+    aboutImage: null as string | null,         // TODO: /images/about-sonia.webp
+    aboutImageAlt: null as string | null,
+    locationImage: null as string | null,      // TODO: /images/location-salon.webp
+    locationImageAlt: null as string | null,
+
     parkingNote: "",                           // TODO: ask client
     paymentMethods: [],                        // TODO: ask client — likely Cash, Easypaisa, JazzCash
   },
@@ -72,6 +84,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,                   // TODO: ask client
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "nikah",
@@ -83,6 +97,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "barat",
@@ -94,6 +110,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "walima",
@@ -105,6 +123,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "engagement",
@@ -116,6 +136,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
 
     // ---- Party ----
@@ -129,6 +151,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
 
     // ---- Hair (their stated specialism) ----
@@ -142,6 +166,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "highlights",
@@ -153,6 +179,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "haircut",
@@ -164,6 +192,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "hair-treatment",
@@ -175,6 +205,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
 
     // ---- Skin ----
@@ -188,6 +220,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "threading",
@@ -199,6 +233,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
     {
       id: "waxing",
@@ -210,6 +246,8 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
+      image: null as string | null,
+      imageAlt: null as string | null,
     },
   ],
 

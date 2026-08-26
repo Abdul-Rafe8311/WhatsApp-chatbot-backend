@@ -1,3 +1,4 @@
+import { SalonImage } from "@/components/SalonImage";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
@@ -24,11 +25,14 @@ export function Hero({ id }: { id: string }) {
           />
         </div>
 
-        {/* Image slot. No photography exists yet, so this is a solid crimson
-            field at the portrait ratio a bridal photo will use — a colour
-            block that belongs in the composition, not a placeholder waiting
-            to be filled. Purely decorative: no text, nothing to announce. */}
-        <div className="aspect-[4/5] w-full bg-crimson" />
+        {/* The one image above the fold, so it loads eagerly. Until a file
+            lands this is a quiet tonal panel, not a coloured block. */}
+        <SalonImage
+          src={salon.info.heroImage}
+          alt={salon.info.heroImageAlt}
+          ratio="4:5"
+          priority
+        />
       </div>
     </section>
   );

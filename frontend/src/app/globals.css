@@ -5,13 +5,19 @@
    No arbitrary colour values in components; everything routes through these.
 --------------------------------------------------------------------------- */
 @theme {
-  --color-ink: #1b0f13;
-  --color-ink-2: #2a1820;
-  --color-crimson: #8c2331;
-  --color-gold: #be9b4d;
-  --color-emerald: #1e5c4c;
-  --color-magenta: #9c2a5e;
+  /* Near-neutral by design. The salon's own work is extremely saturated —
+     crimson lehengas, emerald and magenta mehndi, kundan gold — and the
+     photographs are the colour on this page. Chrome that competes with them
+     turns into noise, so the chrome stays out of the way.
+
+     Crimson, emerald and magenta were section grounds in the first plan and
+     have been removed entirely: full-bleed saturated panels read as a default
+     dark theme, and the flat blocks on them read as failed image loads. */
+  --color-ink: #170e11;
+  --color-ink-2: #221619;
+  --color-ink-3: #2c1d21;
   --color-ivory: #efe7d8;
+  --color-gold: #be9b4d;
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;

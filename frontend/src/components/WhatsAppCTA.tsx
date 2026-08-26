@@ -1,34 +1,31 @@
-import { Seal } from "@/components/Seal";
-import { whatsappHref } from "@/lib/whatsapp";
+import { WhatsAppLink } from "@/components/WhatsAppLink";
 
 type Size = "lg" | "sm";
 
 type Props = {
-  /** Message the visitor's WhatsApp opens with. Compose via copy.cta.*. */
   prefill: string;
   label: string;
-  /**
-   * Overrides the accessible name where several CTAs share one visible
-   * label — service swatches, for instance, all read "Book on WhatsApp".
-   */
+  /** Defaults to the visible label; set where several CTAs share one. */
   ariaLabel?: string;
   size?: Size;
   className?: string;
 };
 
 /**
- * The single call-to-action on this site. Every CTA — hero, sticky pill,
- * service swatch, contact — renders through here. No section builds a wa.me
- * URL of its own.
+ * The prominent call to action. Deliberately rare: the hero, the hours
+ * section, and the sticky pill — three on the whole page.
  *
- * The gate is behavioural, not visual. When the number is unusable this
- * renders an inert <button aria-disabled="true"> that looks *identical* to
- * the live link: same border, same colour, same cursor, full opacity. The
- * design stays reviewable, and nobody can tap through to an unset number.
+ * Thirteen of these in the services list was the single loudest thing making
+ * the page read as generated; real sites do not ask sixteen times. Service
+ * rows still open WhatsApp, but through <WhatsAppLink> with recessive styling
+ * so the service name dominates its row, not a button.
  *
- * Deliberately not `disabled` — that would drop it out of tab order and let
- * the UA restyle it. `aria-disabled` keeps it focusable and announced while
- * a `type="button"` with no handler does nothing on click.
+ * No seal here. Inside a pill beside text the raised apostrophe reads as a
+ * stray comma; it belongs in the wordmark, where it is a mark rather than
+ * punctuation floating next to a word.
+ *
+ * Both states share one class string, so the inert button is pixel-identical
+ * to the live link. The gate is behavioural, never visual.
  */
 export function WhatsAppCTA({
   prefill,
@@ -37,14 +34,9 @@ export function WhatsAppCTA({
   size = "lg",
   className = "",
 }: Props) {
-  const href = whatsappHref(prefill);
-
   const sizing =
-    size === "lg"
-      ? "gap-2.5 px-6 py-4 text-base"
-      : "gap-2 px-4 py-3 text-[0.9375rem]";
+    size === "lg" ? "px-7 py-4 text-base" : "px-5 py-3 text-[0.9375rem]";
 
-  // One class string for both states — this is what keeps them identical.
   const classes = [
     "type-cta inline-flex items-center justify-center",
     "min-h-[44px] rounded-full border border-gold text-ivory",
@@ -56,35 +48,13 @@ export function WhatsAppCTA({
     className,
   ].join(" ");
 
-  const content = (
-    <>
-      <Seal className="text-[1.25em]" />
-      <span>{label}</span>
-    </>
-  );
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={ariaLabel}
-        className={classes}
-      >
-        {content}
-      </a>
-    );
-  }
-
   return (
-    <button
-      type="button"
-      aria-disabled="true"
-      aria-label={ariaLabel}
+    <WhatsAppLink
+      prefill={prefill}
+      ariaLabel={ariaLabel ?? label}
       className={classes}
     >
-      {content}
-    </button>
+      {label}
+    </WhatsAppLink>
   );
 }

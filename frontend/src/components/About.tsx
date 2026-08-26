@@ -1,3 +1,4 @@
+import { SalonImage } from "@/components/SalonImage";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
 
@@ -19,9 +20,14 @@ export function About({ id }: { id: string }) {
   return (
     <section id={id} className="seam bg-ink">
       <div className="wrap grid gap-8 py-16 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-16">
-        {/* Future owner portrait. Magenta at 4:5 — the hero's field is crimson
-            and sits on the opposite side, so the two never read as a pattern. */}
-        <div className="aspect-[4/5] w-full bg-magenta" />
+        {/* Sonia herself — the section is about the person. Sits left where
+            the hero's sits right, so the two portraits never read as a
+            repeating pattern down the page. */}
+        <SalonImage
+          src={salon.info.aboutImage}
+          alt={salon.info.aboutImageAlt}
+          ratio="4:5"
+        />
 
         <div className="flex flex-col gap-7">
           <h2 className="type-meta text-gold">{copy.about.heading}</h2>

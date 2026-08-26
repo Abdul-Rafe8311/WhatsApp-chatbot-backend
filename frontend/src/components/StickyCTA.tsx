@@ -2,14 +2,13 @@ import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { copy } from "@/config/copy";
 
 /**
- * The signature element: one gold-hairline pill carrying the seal and the
- * words, fixed in the thumb zone while ink / emerald / crimson panels scroll
- * behind it. Constant shape, constant position — at any point in the scroll
- * there is exactly one thing on screen that means "message us".
+ * One of the three prominent CTAs, and the only one that follows the scroll:
+ * a gold-hairline pill fixed in the thumb zone. Constant shape and position,
+ * so at any point on the page there is exactly one thing that means
+ * "message us".
  *
- * Always rendered, never scroll-triggered: no client JS, no layout shift, and
- * nothing to animate. The seal alone was the earlier plan and was rejected —
- * a bare mark does not tell a bride what tapping does.
+ * Always rendered rather than scroll-triggered: no client JS, no layout
+ * shift, nothing to animate on a static export.
  */
 export function StickyCTA() {
   return (
@@ -19,7 +18,7 @@ export function StickyCTA() {
         label={copy.cta.label}
         size="sm"
         // A ground of its own so the hairline and label stay legible over
-        // whichever colour panel happens to be behind it.
+        // whatever is scrolling behind it.
         className="bg-ink/90 backdrop-blur-sm"
       />
     </div>
