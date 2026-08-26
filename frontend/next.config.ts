@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   // No Next image optimisation server exists in a static export.
   images: { unoptimized: true },
+  // `next dev` otherwise appends a managed block to CLAUDE.md on every start.
+  // That file is maintained by hand; a tool silently editing it produces
+  // mystery diffs and dirties the tree mid-review.
+  agentRules: false,
 };
 
 export default nextConfig;
