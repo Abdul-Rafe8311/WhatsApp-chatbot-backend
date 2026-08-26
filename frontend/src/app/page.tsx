@@ -1,12 +1,11 @@
-import { Hero } from "@/components/Hero";
-import { Services } from "@/components/Services";
+import { SECTIONS } from "@/lib/sections";
 
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
-      <Hero />
-      <Services />
-      {/* Stages 4–5: about, hours & location. */}
+      {SECTIONS.map(({ id, Component }) => (
+        <Component key={id} id={id} />
+      ))}
     </main>
   );
 }

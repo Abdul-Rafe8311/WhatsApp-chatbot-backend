@@ -2,13 +2,13 @@ import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
 
-export function Hero() {
+export function Hero({ id }: { id: string }) {
   // The strongest trust signal on the page in this market. Composed from the
   // config's three separate strings rather than stored pre-joined.
   const credentialLine = salon.info.credentials.join(copy.credentialSeparator);
 
   return (
-    <section className="bg-ink">
+    <section id={id} className="bg-ink">
       <div className="wrap grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
         <div className="flex flex-col items-start gap-6">
           <h1 className="type-hero">{copy.hero.headline}</h1>

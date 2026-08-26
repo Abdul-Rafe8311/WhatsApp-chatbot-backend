@@ -48,9 +48,9 @@ function ServiceItem({ service }: { service: Service }) {
   );
 }
 
-export function Services() {
+export function Services({ id }: { id: string }) {
   return (
-    <section id="services" className="seam bg-emerald">
+    <section id={id} className="seam bg-emerald">
       <div className="wrap flex flex-col gap-12 py-16 sm:py-20">
         <h2 className="type-h2">{copy.services.heading}</h2>
 
