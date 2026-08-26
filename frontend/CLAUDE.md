@@ -25,7 +25,26 @@ Do not build these. If a change seems to require one, stop and ask:
 - Blog, reviews system, or newsletter signup
 - Analytics, tracking pixels, cookie banners
 - Multi-language or i18n framework (site is English only)
-- Dark mode toggle
+
+### Reversed: dark mode toggle
+
+"Dark mode toggle" was a non-goal until Revision 3, when the site flipped to
+a warm light palette and a toggle was added to the nav. Recorded here rather
+than silently deleted, because the original reason was sound: a toggle costs
+a second palette to maintain, and a salon site does not obviously need one.
+
+What changed is that the dark palette already existed and was already
+paid for — Revisions 1 and 2 shipped on it — so the toggle costs one button
+and a class, not a second design. Both palettes are in the same token set;
+no component knows which is active. See docs/design-plan.md R3.
+
+**Light is the unconditional default.** `prefers-color-scheme` is
+deliberately ignored: only an explicit stored choice turns dark on. Most
+visitors arrive from the Instagram bio link and see the page once, so a
+visitor with dark mode enabled would otherwise never see the intended design.
+Respecting the OS is right for an app people return to; it is wrong for a
+single-visit brand page. Do not "fix" this by re-adding a `matchMedia` check
+to `src/lib/theme.ts` — it was removed on purpose. See R3.4.
 
 ## Stack
 

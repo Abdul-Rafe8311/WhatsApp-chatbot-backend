@@ -1,9 +1,109 @@
 # Design plan — Sonia's Makeup Salon
 
-Status: **built, then revised.** Revision 2 below supersedes the colour,
+Status: **built, then revised twice.** Revision 3 supersedes Revision 2 on
+colour and adds theming; Revision 2 supersedes the colour,
 image-slot, CTA-count, signature and services decisions in the original plan.
 The original reasoning is retained deliberately — the arguments that turned
 out to be wrong are the useful part.
+
+---
+
+---
+
+# Revision 3 — warm light default, with a toggle
+
+## R3.1 — Light ground, rose not cream
+
+**Was:** a single near-black ground, on the argument that quiet dark chrome
+lets saturated bridal photography be the only colour.
+
+**Is:** a warm light ground by default, `#FBF6F7`, with the Revision 2 dark
+palette kept and reachable by toggle.
+
+**Why the ground is rose and not beige.** The obvious value here is
+`#F4F1EA` — and CLAUDE.md bans it by name, because cream ground plus serif
+display plus gold accent is the single most generic "elegant salon" look
+there is. That cream is *yellow* (hue 43deg). This ground goes warm in the
+opposite direction on the wheel: hue 348deg, a faint rose. Two things follow
+from that. It cannot be mistaken for the default, and it sits in the same red
+family as the dark theme's aubergine-black, so the two themes read as one
+identity rather than two designs.
+
+`surface-2` is a near-neighbour rather than a contrasting band: sections
+still separate by spacing and the gold hairline, never by a tonal jump.
+
+**Revision 2's principle survives intact** — photographs are still the only
+saturated colour. A light ground makes that easier, not harder.
+
+## R3.2 — Gold becomes bronze on light, and stops being text
+
+**Was:** `#BE9B4D` for hairlines, small labels, prices and CTA borders.
+
+**Is:** on light, `#8A6A24` for structure only. Small labels move to a warm
+taupe `#6B5A55`. On dark, nothing changes.
+
+**Why.** This is the trap in a light-and-gold palette and it is a measurement,
+not a preference. `#BE9B4D` on `#FBF6F7` is **2.46:1**. That fails AA text
+(4.5:1) and fails even the 3:1 non-text threshold — so it is not merely
+hard to read as a label, it is not legal as the visible border of a control.
+Darkening to `#8A6A24` holds the same 41deg gold hue and reaches 4.71:1.
+
+Gold is therefore **structural only** on light: hairline seams, the CTA
+border, the wordmark apostrophe, link hover. No gold text at body size, no
+gold fills, no gradients. It should feel rationed, and now it is enforced by
+contrast rather than by taste.
+
+Muted text steps were re-derived too: `fg/50` measured 3.32:1 on light and
+was raised to `fg/65` (5.80:1). Every pair in both themes now passes AA.
+
+## R3.3 — Class-based theming, no flash
+
+**Was:** a single committed dark design, `color-scheme: dark`.
+
+**Is:** `.dark` on the root element switches one CSS custom-property set.
+Components read semantic names — `surface`, `surface-2`, `fg`, `label`,
+`gold` — and none knows which theme is active.
+
+**Why it is built this way.** This is a static export, so the HTML ships
+pre-rendered in the light default. Without intervention a dark-preferring
+visitor gets a white flash before React can correct it, which is worse than
+having no toggle. A blocking inline script in `<head>` sets the class before
+first paint; anything deferred, bundled or hydration-driven is already too
+late.
+
+The toggle itself is stateless. Which label shows is decided by CSS off the
+`.dark` class, not React state, so there is nothing to hydrate and no
+mismatch to suppress on the button.
+
+## R3.4 — Light is the unconditional default
+
+**Was:** first visit followed `prefers-color-scheme`, so a visitor whose OS
+was in dark mode landed on the dark theme. This is what Revision 3 originally
+specified.
+
+**Is:** `prefers-color-scheme` is not consulted at all. Light renders for
+every first-time visitor. Only an explicit stored choice — made by pressing
+the toggle — turns dark on, and it persists from then on.
+
+**Why the reversal.** The light palette is the brand identity here, not a
+preference. Almost everyone arrives from the Instagram bio link and sees this
+page **once**. Under the old rule, a bride whose phone is in dark mode would
+never once see the design the salon is actually being sold — the OS setting
+would silently override the identity for a large share of the audience, on
+their only visit.
+
+Respecting the OS is the right default for an app someone returns to daily.
+It is the wrong default for a single-visit brand page, and that distinction
+is what the original spec missed.
+
+The dark theme is not wasted: it stays a deliberate, remembered choice for
+anyone who wants it, and it is still the palette Revisions 1 and 2 were built
+on. The no-flash guarantee is unchanged and still load-bearing — a stored
+dark choice must apply before first paint, which is exactly what the inline
+script does.
+
+**Verified:** the stylesheet contains zero `prefers-color-scheme` rules, so
+the OS preference is structurally incapable of affecting the palette.
 
 ---
 
