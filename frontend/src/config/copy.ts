@@ -58,6 +58,13 @@ export const copy = {
 
   about: {
     heading: "About",
+    /**
+     * Social proof line. The count and the badge state are salon data and
+     * live in salon.ts — only the wording around them belongs here.
+     * Rendered as a link so the claim is checkable rather than asserted.
+     */
+    socialProof: (followers: string) => `${followers} on Instagram`,
+    verifiedLabel: "Verified",
   },
 
   hours: {

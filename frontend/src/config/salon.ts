@@ -38,6 +38,8 @@ export const salon = {
     isDemoNumber: true,
 
     instagram: "https://www.instagram.com/soniasmakeupsalon/",  // CONFIRMED
+    instagramFollowers: "49.9K",                // CONFIRMED (read from profile)
+    instagramVerified: true,                    // CONFIRMED (verified badge on profile)
     facebook: "https://www.facebook.com/soniasmakeupsalon/",    // CONFIRMED
 
     credentials: [

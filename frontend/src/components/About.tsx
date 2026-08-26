@@ -36,13 +36,29 @@ export function About({ id }: { id: string }) {
 
           {/* Stacked rather than joined with · as in the hero: same facts, but
               here they read as a credentials block instead of a byline. */}
-          <ul className="seam flex flex-col gap-1.5 pt-5">
-            {salon.info.credentials.map((credential) => (
-              <li key={credential} className="type-meta text-gold">
-                {credential}
-              </li>
-            ))}
-          </ul>
+          <div className="seam flex flex-col items-start gap-1.5 pt-5">
+            <ul className="flex flex-col gap-1.5">
+              {salon.info.credentials.map((credential) => (
+                <li key={credential} className="type-meta text-gold">
+                  {credential}
+                </li>
+              ))}
+            </ul>
+
+            {/* Social proof, and a link rather than a claim — the follower
+                count and verified badge are checkable in one tap. Both values
+                come from salon.ts; only the wording is copy. */}
+            <a
+              href={salon.info.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="type-meta text-gold inline-flex min-h-[44px] items-center hover:text-ivory transition-colors duration-200"
+            >
+              {copy.about.socialProof(salon.info.instagramFollowers)}
+              {salon.info.instagramVerified &&
+                copy.credentialSeparator + copy.about.verifiedLabel}
+            </a>
+          </div>
         </div>
       </div>
     </section>
