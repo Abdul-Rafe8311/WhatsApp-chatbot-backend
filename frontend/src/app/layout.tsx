@@ -25,7 +25,11 @@ export const metadata: Metadata = {
   description: `Bridal makeup and balayage in ${salon.info.city}.`,
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
