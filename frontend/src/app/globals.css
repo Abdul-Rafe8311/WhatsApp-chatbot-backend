@@ -15,6 +15,10 @@
   --color-fg: var(--fg);
   --color-label: var(--label);
   --color-gold: var(--gold);
+  /* Text and scrim over a photograph. Identical in both themes: the layer
+     underneath is the image, not the page, so the theme has no bearing on
+     what is legible. */
+  --color-on-image: #f7f2ea;
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
@@ -166,6 +170,61 @@
   /* The gold hairline seam that stitches one colour panel to the next. */
   .seam {
     border-top: 1px solid var(--color-gold);
+  }
+  /* ---- Hero scrim -------------------------------------------------------
+     Must hold text over a light photograph as well as a dark one. The worst
+     case is pure white under the strongest stop: white at 22% through a 78%
+     black scrim composites to ~#383838, which carries --color-on-image well
+     past AA. Bottom-weighted because the headline sits low in the frame. */
+  .hero-scrim {
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.78) 0%,
+      rgb(0 0 0 / 0.62) 32%,
+      rgb(0 0 0 / 0.38) 62%,
+      rgb(0 0 0 / 0.24) 100%
+    );
+  }
+
+  /* ---- Portfolio masonry ------------------------------------------------
+     CSS columns rather than a JS masonry library: no runtime, no reflow
+     pass, and it degrades to a single column at 375px on its own. */
+  .pf-grid {
+    column-gap: 0.75rem;
+  }
+  .pf-grid > li {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .pf-grid { columns: 2; column-gap: 1rem; }
+    .pf-grid > li { margin-bottom: 1rem; }
+  }
+  @media (min-width: 1024px) {
+    .pf-grid { columns: 3; }
+  }
+
+  /* ---- Portfolio filter -------------------------------------------------
+     Radio inputs plus sibling selectors. Zero JavaScript, keyboard operable
+     for free, and it works before hydration. The per-category rules are
+     generated from the config in <Portfolio>, so adding a filter needs no
+     CSS change here. */
+  .pf-filter-label {
+    cursor: pointer;
+  }
+  .pf-input:focus-visible + .pf-filter-label {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ---- Lightbox ---------------------------------------------------------
+     :target driven. No JavaScript, and the browser Back button closes it,
+     which is the behaviour phone users already expect. */
+  .lb {
+    display: none;
+  }
+  .lb:target {
+    display: flex;
   }
 }
 
