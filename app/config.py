@@ -16,8 +16,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR: Final[Path] = Path(__file__).resolve().parent.parent
-DATA_DIR: Final[Path] = BASE_DIR / "data"
-DATA_DIR.mkdir(exist_ok=True)
+
+
+def _resolve_data_dir() -> Path:
+    """Pick a writable directory for the Excel store.
+
+    Serverless hosts (Vercel, Lambda) mount the deployment read-only and only
+    give you /tmp, so a bare mkdir here would raise at import time and take the
+    whole app down. /tmp is ephemeral — the Google Sheet mirror is the durable
+    copy when running on one of these hosts.
+    """
+    override = os.getenv("DATA_DIR", "").strip()
+    candidates = [Path(override)] if override else []
+    if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+        candidates.append(Path("/tmp/glowdesk-data"))
+    else:
+        candidates.append(BASE_DIR / "data")
+    candidates.append(Path("/tmp/glowdesk-data"))
+
+    for candidate in candidates:
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            return candidate
+        except OSError:
+            continue
+    return candidates[-1]
+
+
+DATA_DIR: Final[Path] = _resolve_data_dir()
 
 BOOKINGS_XLSX: Final[Path] = DATA_DIR / "bookings.xlsx"
 BOOKINGS_CSV_FALLBACK: Final[Path] = DATA_DIR / "bookings_fallback.csv"
