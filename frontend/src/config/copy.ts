@@ -53,6 +53,10 @@ export const copy = {
     } as Partial<Record<string, string>>,
   },
 
+  about: {
+    heading: "About",
+  },
+
   footer: {
     instagram: "Instagram",
     facebook: "Facebook",
