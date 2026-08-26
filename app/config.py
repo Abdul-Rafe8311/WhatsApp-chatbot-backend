@@ -89,7 +89,7 @@ SERVICES: Final[tuple[Service, ...]] = (
     Service("Hair Spa", 4500, 75, ("hair spa", "spa", "treatment", "keratin")),
 )
 
-SALON_NAME: Final[str] = os.getenv("SALON_NAME") or "GlowDesk Beauty Salon"
+SALON_NAME: Final[str] = os.getenv("SALON_NAME") or "Sonia's Makeup Salon"
 SALON_ADDRESS: Final[str] = (
     os.getenv("SALON_ADDRESS")
     or "Shop 12, Ground Floor, Gulberg Galleria, Main Boulevard, Gulberg III, Lahore"
@@ -163,6 +163,35 @@ LLM_MODEL: Final[str] = os.getenv("LLM_MODEL", "").strip()
 GOOGLE_SHEETS_CREDENTIALS_FILE: Final[str] = os.getenv("GOOGLE_SHEETS_CREDENTIALS_FILE", "").strip()
 GOOGLE_SHEET_ID: Final[str] = os.getenv("GOOGLE_SHEET_ID", "").strip()
 GOOGLE_SHEET_TAB: Final[str] = os.getenv("GOOGLE_SHEET_TAB", "").strip() or "Bookings"
+
+# Browser origins allowed to call /api/*. The widget is served from the public
+# site, which is a different origin to this API, so it needs real CORS rather
+# than the previous allow-everything.
+#
+# CORS_ALLOW_ORIGINS is a comma-separated list and replaces the defaults when
+# set. The regex is separate because Vercel gives every preview deployment its
+# own hostname, and those cannot be enumerated ahead of time.
+_DEFAULT_CORS_ORIGINS: Final[tuple[str, ...]] = (
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+)
+
+
+def _split_origins(raw: str) -> list[str]:
+    return [part.strip().rstrip("/") for part in raw.split(",") if part.strip()]
+
+
+CORS_ALLOW_ORIGINS: Final[list[str]] = (
+    _split_origins(os.getenv("CORS_ALLOW_ORIGINS", ""))
+    or list(_DEFAULT_CORS_ORIGINS)
+)
+
+# Any *.vercel.app host: the production frontend plus its preview deployments.
+# Override with CORS_ALLOW_ORIGIN_REGEX once the site has its own domain.
+CORS_ALLOW_ORIGIN_REGEX: Final[str] = (
+    os.getenv("CORS_ALLOW_ORIGIN_REGEX", "").strip()
+    or r"https://[a-z0-9-]+\.vercel\.app"
+)
 
 SESSION_TTL_SECONDS: Final[int] = int(os.getenv("SESSION_TTL_SECONDS") or 3600)
 DEDUPE_TTL_SECONDS: Final[int] = int(os.getenv("DEDUPE_TTL_SECONDS") or 600)

@@ -102,6 +102,29 @@ export const copy = {
     toLight: "Switch to light theme",
   },
 
+  chat: {
+    /** Launcher and panel are the same control; the label says what opens. */
+    launch: "Chat with us",
+    close: "Close chat",
+    title: "Booking assistant",
+    subtitle: "Typically replies instantly",
+    reset: "Reset",
+    resetAria: "Start a new conversation",
+    placeholder: "Type a message",
+    send: "Send",
+    /**
+     * Names the salon so the first line of the conversation confirms the
+     * visitor reached the right business, and suggests openers — an empty
+     * chat box gets far fewer messages than a prompted one.
+     */
+    greeting: (salonName: string) =>
+      `Assalam o Alaikum, and welcome to ${salonName}. Ask me about services, ` +
+      `prices or timings \u2014 or say \u201cbook bridal makeup\u201d.`,
+    /** Shown in the transcript when the request fails. Never a bare "Error". */
+    unreachable:
+      "Could not reach the salon just now. Please try again in a moment, or message us on WhatsApp.",
+  },
+
   footer: {
     instagram: "Instagram",
     facebook: "Facebook",

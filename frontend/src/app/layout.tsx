@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { StickyCTA } from "@/components/StickyCTA";
+import { ChatWidget } from "@/components/ChatWidget";
 import { salon } from "@/config/salon";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
@@ -56,6 +57,7 @@ export default function RootLayout({
         <div className="flex flex-1 flex-col">{children}</div>
         <SiteFooter />
         <StickyCTA />
+        <ChatWidget />
       </body>
     </html>
   );

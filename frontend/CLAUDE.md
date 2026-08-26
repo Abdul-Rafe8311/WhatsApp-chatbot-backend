@@ -46,6 +46,24 @@ Respecting the OS is right for an app people return to; it is wrong for a
 single-visit brand page. Do not "fix" this by re-adding a `matchMedia` check
 to `src/lib/theme.ts` — it was removed on purpose. See R3.4.
 
+### Reversed: the site now talks to the booking agent
+
+"This site does not talk to the agent or the database yet" and "do not add a
+backend, API routes, or database client to this repo" stood until the chat
+widget was ported in. `src/components/ChatWidget.tsx` calls the agent's
+`/api/chat` over HTTP.
+
+What has NOT changed, and is the part of the rule that mattered: there is no
+API route, no server, no database client, and no build-time data fetch. This
+is still a static export. The widget is a client component that calls a
+separate service the same way it calls wa.me — from the visitor's browser,
+after load. Content still lives in `salon.ts` and `copy.ts`; the agent answers
+from its own copy of the salon data, not from this repo.
+
+The base URL resolves in `src/lib/api.ts` (`NEXT_PUBLIC_API_URL`, else
+localhost when served from localhost, else the deployed API). Do not hardcode
+a host in the component.
+
 ## Stack
 
 - Next.js (App Router) + TypeScript

@@ -25,13 +25,20 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Demo site is served from a different origin; tighten this before production.
+# The site is served from a different origin to this API. Named origins cover
+# local dev and any explicit CORS_ALLOW_ORIGINS entries; the regex covers the
+# deployed frontend and its per-commit Vercel preview hostnames.
+#
+# allow_credentials stays False: the widget authenticates nothing and sends no
+# cookies, and leaving it False is what lets the origin list stay permissive
+# without handing any site the ability to make credentialed calls.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=config.CORS_ALLOW_ORIGINS,
+    allow_origin_regex=config.CORS_ALLOW_ORIGIN_REGEX,
     allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 
