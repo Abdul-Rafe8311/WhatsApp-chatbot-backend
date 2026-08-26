@@ -19,7 +19,7 @@ export function StickyCTA() {
         size="sm"
         // A ground of its own so the hairline and label stay legible over
         // whatever is scrolling behind it.
-        className="bg-ink/90 backdrop-blur-sm"
+        className="bg-surface/90 backdrop-blur-sm"
       />
     </div>
   );

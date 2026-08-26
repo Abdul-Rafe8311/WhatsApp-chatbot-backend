@@ -37,10 +37,10 @@ function BridalCard({ service }: { service: Service }) {
         </h4>
 
         {service.description && (
-          <p className="type-body text-ivory/70">{service.description}</p>
+          <p className="type-body text-fg/70">{service.description}</p>
         )}
 
-        <p className="type-data text-ivory/50">{service.priceNote}</p>
+        <p className="type-data text-fg/65">{service.priceNote}</p>
       </div>
     </li>
   );
@@ -53,14 +53,14 @@ function BridalCard({ service }: { service: Service }) {
  */
 function ServiceRow({ service }: { service: Service }) {
   return (
-    <li className="relative border-t border-gold/15">
+    <li className="relative border-t border-gold/25">
       <WhatsAppLink
         prefill={copy.cta.servicePrefill(service.name)}
         ariaLabel={copy.cta.serviceAriaLabel(service.name)}
         className="flex min-h-[44px] items-baseline justify-between gap-4 py-3 hover:text-gold transition-colors duration-200"
       >
         <span className="type-body">{service.name}</span>
-        <span className="type-data shrink-0 text-ivory/50">
+        <span className="type-data shrink-0 text-fg/65">
           {service.priceNote}
         </span>
       </WhatsAppLink>
@@ -93,15 +93,15 @@ export function Services({ id }: { id: string }) {
     .filter((group) => group.services.length > 0);
 
   return (
-    <section id={id} className="seam bg-ink">
+    <section id={id} className="seam bg-surface">
       <div className="wrap flex flex-col gap-14 py-16 sm:py-24">
         <h2 className="type-h2">{copy.services.heading}</h2>
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-1">
-            <h3 className="type-meta text-gold">{BRIDAL}</h3>
+            <h3 className="type-meta text-label">{BRIDAL}</h3>
             {copy.services.groupNotes[BRIDAL] && (
-              <p className="type-meta text-ivory/50">
+              <p className="type-meta text-fg/65">
                 {copy.services.groupNotes[BRIDAL]}
               </p>
             )}
@@ -128,7 +128,7 @@ export function Services({ id }: { id: string }) {
         <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {compactGroups.map((group) => (
             <div key={group.category} className="flex flex-col gap-3">
-              <h3 className="type-meta text-gold">{group.category}</h3>
+              <h3 className="type-meta text-label">{group.category}</h3>
               <ul className="flex flex-col">
                 {group.services.map((service) => (
                   <ServiceRow key={service.id} service={service} />

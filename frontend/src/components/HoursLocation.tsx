@@ -30,7 +30,7 @@ export function HoursLocation({ id }: { id: string }) {
   const mapsUrl = copy.location.mapsUrl(salon.info.address);
 
   return (
-    <section id={id} className="seam bg-ink">
+    <section id={id} className="seam bg-surface">
       <div className="wrap grid gap-8 pt-16 sm:pt-20 lg:grid-cols-[5fr_7fr] lg:gap-16">
         <h2 className="type-h2">{copy.hours.heading}</h2>
 
@@ -47,7 +47,7 @@ export function HoursLocation({ id }: { id: string }) {
                     className="flex items-baseline justify-between gap-6 border-t border-gold/25 py-2"
                   >
                     <dt className="type-data">{row.day}</dt>
-                    <dd className="type-data text-ivory/75">
+                    <dd className="type-data text-fg/70">
                       {closed
                         ? copy.hours.closedLabel
                         : `${row.open}–${row.close}`}
@@ -59,7 +59,7 @@ export function HoursLocation({ id }: { id: string }) {
           ) : (
             <div className="flex flex-col items-start gap-4">
               <p className="type-lead">{copy.hours.unverifiedLead}</p>
-              <p className="type-body text-ivory/75">
+              <p className="type-body text-fg/70">
                 {copy.hours.unverifiedNote}
               </p>
               <WhatsAppCTA
@@ -76,7 +76,7 @@ export function HoursLocation({ id }: { id: string }) {
               href={mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="type-meta text-gold inline-flex min-h-[44px] items-center hover:text-ivory transition-colors duration-200"
+              className="type-meta text-label inline-flex min-h-[44px] items-center hover:text-fg transition-colors duration-200"
             >
               {copy.location.mapsLabel}
             </a>

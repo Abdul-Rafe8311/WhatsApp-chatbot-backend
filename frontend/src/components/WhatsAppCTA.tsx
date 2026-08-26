@@ -39,11 +39,11 @@ export function WhatsAppCTA({
 
   const classes = [
     "type-cta inline-flex items-center justify-center",
-    "min-h-[44px] rounded-full border border-gold text-ivory",
+    "min-h-[44px] rounded-full border border-gold text-fg",
     "transition-colors duration-200 hover:bg-gold/10",
     // The global focus ring is gold, which would sit invisibly on this
     // element's own gold border. Ivory at a wider offset instead.
-    "focus-visible:outline-ivory focus-visible:outline-offset-4",
+    "focus-visible:outline-fg focus-visible:outline-offset-4",
     sizing,
     className,
   ].join(" ");

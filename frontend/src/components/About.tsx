@@ -18,7 +18,7 @@ export function About({ id }: { id: string }) {
     .filter(Boolean);
 
   return (
-    <section id={id} className="seam bg-ink">
+    <section id={id} className="seam bg-surface">
       <div className="wrap grid gap-8 py-16 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-16">
         {/* Sonia herself — the section is about the person. Sits left where
             the hero's sits right, so the two portraits never read as a
@@ -30,7 +30,7 @@ export function About({ id }: { id: string }) {
         />
 
         <div className="flex flex-col gap-7">
-          <h2 className="type-meta text-gold">{copy.about.heading}</h2>
+          <h2 className="type-meta text-label">{copy.about.heading}</h2>
 
           <div className="flex flex-col gap-4">
             {paragraphs.map((paragraph) => (
@@ -45,7 +45,7 @@ export function About({ id }: { id: string }) {
           <div className="seam flex flex-col items-start gap-1.5 pt-5">
             <ul className="flex flex-col gap-1.5">
               {salon.info.credentials.map((credential) => (
-                <li key={credential} className="type-meta text-gold">
+                <li key={credential} className="type-meta text-label">
                   {credential}
                 </li>
               ))}
@@ -58,7 +58,7 @@ export function About({ id }: { id: string }) {
               href={salon.info.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="type-meta text-gold inline-flex min-h-[44px] items-center hover:text-ivory transition-colors duration-200"
+              className="type-meta text-label inline-flex min-h-[44px] items-center hover:text-fg transition-colors duration-200"
             >
               {copy.about.socialProof(salon.info.instagramFollowers)}
               {salon.info.instagramVerified &&

@@ -11,14 +11,14 @@ const SOCIALS = [
 
 export function SiteFooter() {
   return (
-    <footer className="seam bg-ink">
+    <footer className="seam bg-surface">
       <div className="wrap flex flex-col gap-8 py-12 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <Seal className="text-2xl" />
             <Wordmark className="text-xl" />
           </div>
-          <p className="type-meta text-ivory/60">{salon.info.city}</p>
+          <p className="type-meta text-fg/65">{salon.info.city}</p>
         </div>
 
         <nav>
@@ -29,7 +29,7 @@ export function SiteFooter() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="type-meta inline-flex min-h-[44px] items-center text-ivory/75 hover:text-ivory transition-colors duration-200"
+                  className="type-meta inline-flex min-h-[44px] items-center text-fg/70 hover:text-fg transition-colors duration-200"
                 >
                   {social.label}
                 </a>
@@ -43,7 +43,7 @@ export function SiteFooter() {
           page, and it disappears on its own once a real number is set. */}
       {!whatsappReady && (
         <div className="wrap">
-          <p className="text-xs leading-relaxed text-ivory/35">
+          <p className="text-xs leading-relaxed text-fg/60">
             {copy.footer.demoNotice}
           </p>
         </div>

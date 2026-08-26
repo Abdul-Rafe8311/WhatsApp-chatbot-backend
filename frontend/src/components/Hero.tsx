@@ -9,7 +9,7 @@ export function Hero({ id }: { id: string }) {
   const credentialLine = salon.info.credentials.join(copy.credentialSeparator);
 
   return (
-    <section id={id} className="bg-ink">
+    <section id={id} className="bg-surface">
       <div className="wrap grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
         <div className="flex flex-col items-start gap-6">
           <h1 className="type-hero">{copy.hero.headline}</h1>
@@ -17,7 +17,7 @@ export function Hero({ id }: { id: string }) {
           {/* Set plainly on the headline's own left edge — no pill, no
               border, no checkmark. Boxing it would make it read as an
               advertisement for itself; as type it reads as fact. */}
-          <p className="type-meta text-gold">{credentialLine}</p>
+          <p className="type-meta text-label">{credentialLine}</p>
 
           <WhatsAppCTA
             prefill={copy.cta.generalPrefill}

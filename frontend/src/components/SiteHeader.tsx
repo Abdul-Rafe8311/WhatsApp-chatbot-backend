@@ -4,7 +4,7 @@ import { NAV_ITEMS } from "@/lib/sections";
 
 export function SiteHeader() {
   return (
-    <header className="bg-ink border-b border-gold">
+    <header className="bg-surface border-b border-gold">
       <div className="wrap flex items-center justify-between gap-4 py-4">
         <a
           href="#top"
@@ -14,26 +14,28 @@ export function SiteHeader() {
           <Wordmark className="text-xl" />
         </a>
 
-        {/* Derived from the section registry, so a link can only exist for a
-            section that actually renders. Anchors appear as stages land.
-            Desktop-only: on a phone the page is one short scroll and the
-            sticky CTA is what matters in the thumb zone. */}
-        {NAV_ITEMS.length > 0 && (
-          <nav className="hidden sm:block">
-            <ul className="flex items-center gap-7">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    className="type-meta text-ivory/75 hover:text-ivory transition-colors duration-200"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        <div className="flex items-center gap-6">
+          {/* Derived from the section registry, so a link can only exist for a
+              section that actually renders. Anchors appear as stages land.
+              Desktop-only: on a phone the page is one short scroll and the
+              sticky CTA is what matters in the thumb zone. */}
+          {NAV_ITEMS.length > 0 && (
+            <nav className="hidden sm:block">
+              <ul className="flex items-center gap-7">
+                {NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      className="type-meta text-fg/70 hover:text-fg transition-colors duration-200"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -4,39 +4,54 @@
    Theme tokens — docs/design-plan.md §1 and §2.
    No arbitrary colour values in components; everything routes through these.
 --------------------------------------------------------------------------- */
-@theme {
-  /* Near-neutral by design. The salon's own work is extremely saturated —
-     crimson lehengas, emerald and magenta mehndi, kundan gold — and the
-     photographs are the colour on this page. Chrome that competes with them
-     turns into noise, so the chrome stays out of the way.
+/* Class-based theming: one token set, two value sets. No component knows
+   which theme is active — they all read the same semantic names. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-     Crimson, emerald and magenta were section grounds in the first plan and
-     have been removed entirely: full-bleed saturated panels read as a default
-     dark theme, and the flat blocks on them read as failed image loads. */
-  --color-ink: #170e11;
-  --color-ink-2: #221619;
-  --color-ink-3: #2c1d21;
-  --color-ivory: #efe7d8;
-  --color-gold: #be9b4d;
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-fg: var(--fg);
+  --color-label: var(--label);
+  --color-gold: var(--gold);
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
 }
 
-@layer base {
-  :root {
-    /* Single committed dark design — no toggle (CLAUDE.md non-goal). */
-    color-scheme: dark;
-  }
+/* Light — the default.
 
+   The ground leans ROSE (hue 348), not the yellow-beige of the #F4F1EA cream
+   this brief attracts. That cream is the single most generic "elegant salon"
+   ground there is and CLAUDE.md bans it by name; going warm in the opposite
+   direction on the wheel puts real distance between the two, and ties the
+   light theme to the same red family as the dark aubergine-black.
+
+   Gold cannot be a text colour here. #BE9B4D on this ground measures 2.46:1
+   — it fails AA and even fails the 3:1 non-text threshold, so it is not
+   usable as a control border either. It darkens to a deep antique gold at
+   the same 41deg hue, and small labels move to a warm taupe instead. */
+:root {
+  color-scheme: light;
+  --surface: #fbf6f7;
+  --surface-2: #f5eeef;
+  --surface-3: #efe6e7;
+  --fg: #170e11;
+  --label: #6b5a55;
+  --gold: #8a6a24;
+}
+
+
+@layer base {
   html {
-    background-color: var(--color-ink);
+    background-color: var(--surface);
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--color-ink);
-    color: var(--color-ivory);
+    background-color: var(--surface);
+    color: var(--fg);
     font-family: var(--font-body);
     font-size: 1.0625rem;
     line-height: 1.6;
@@ -44,7 +59,7 @@
 
   /* Visible keyboard focus on every interactive element. */
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--gold);
     outline-offset: 3px;
     border-radius: 1px;
   }

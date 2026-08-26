@@ -19,7 +19,7 @@ export function Wordmark({ className = "" }: { className?: string }) {
   const parts = firstWord.match(/^(.*?)(['’])(.*)$/);
 
   return (
-    <span className={`font-display text-ivory leading-none ${className}`}>
+    <span className={`font-display text-fg leading-none ${className}`}>
       {parts ? (
         <>
           {parts[1]}

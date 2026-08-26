@@ -43,7 +43,7 @@ export function SalonImage({
         // Decorative while empty: there is nothing here to announce, and a
         // screen reader should not be told about a slot awaiting a photo.
         aria-hidden="true"
-        className={`${box} bg-ink-2 ring-1 ring-gold/12 ring-inset`}
+        className={`${box} bg-surface-2 ring-1 ring-gold/20 ring-inset`}
       />
     );
   }
