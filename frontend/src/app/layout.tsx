@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { StickyCTA } from "@/components/StickyCTA";
 import { salon } from "@/config/salon";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -30,7 +31,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       id="top"
       className={`${fraunces.variable} ${karla.variable} h-full antialiased`}
+      // The pre-paint script adds .dark before React sees the document, so
+      // the server HTML and the live DOM differ by design.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <SiteHeader />
         <div className="flex flex-1 flex-col">{children}</div>

@@ -42,6 +42,17 @@
   --gold: #8a6a24;
 }
 
+/* Dark — the Revision 2 palette, unchanged. Gold works at full brightness
+   here (7.21:1), which is exactly why it cannot work on light. */
+.dark {
+  color-scheme: dark;
+  --surface: #170e11;
+  --surface-2: #221619;
+  --surface-3: #2c1d21;
+  --fg: #efe7d8;
+  --label: #be9b4d;
+  --gold: #be9b4d;
+}
 
 @layer base {
   html {

@@ -93,6 +93,15 @@ export const copy = {
       encodeURIComponent(address),
   },
 
+  theme: {
+    /** Visible in the nav — short enough not to crowd the wordmark at 375px. */
+    toDarkShort: "Dark",
+    toLightShort: "Light",
+    /** Accessible names — these say what pressing the button will do. */
+    toDark: "Switch to dark theme",
+    toLight: "Switch to light theme",
+  },
+
   footer: {
     instagram: "Instagram",
     facebook: "Facebook",

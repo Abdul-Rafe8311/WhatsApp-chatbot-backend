@@ -1,4 +1,5 @@
 import { Seal } from "@/components/Seal";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Wordmark } from "@/components/Wordmark";
 import { NAV_ITEMS } from "@/lib/sections";
 
@@ -35,6 +36,10 @@ export function SiteHeader() {
               </ul>
             </nav>
           )}
+
+          {/* Stays visible at 375px, where the nav does not — one short word
+              beside the wordmark rather than a second row. */}
+          <ThemeToggle />
         </div>
       </div>
     </header>
