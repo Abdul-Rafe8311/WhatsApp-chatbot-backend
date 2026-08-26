@@ -1,12 +1,130 @@
 # Design plan — Sonia's Makeup Salon
 
-Status: **built, then revised twice.** Revision 3 supersedes Revision 2 on
+Status: **built, revised three times.** Revision 4 adds the portfolio, the
+person-led about section, the gated testimonial and before/after components,
+the Instagram strip and the full-bleed hero. Revision 3 supersedes Revision 2 on
 colour and adds theming; Revision 2 supersedes the colour,
 image-slot, CTA-count, signature and services decisions in the original plan.
 The original reasoning is retained deliberately — the arguments that turned
 out to be wrong are the useful part.
 
 ---
+
+---
+
+---
+
+# Revision 4 — a full salon site
+
+Expands the page from a single-screen brochure to what a professional salon
+site actually contains. The discipline from Revisions 2 and 3 is unchanged:
+photographs are the only saturated colour, gold stays rationed, and nothing
+renders from a null.
+
+## R4.1 — Portfolio, and why it carries no JavaScript
+
+**Was:** no gallery. Services carried four small images and that was the
+entire visual argument.
+
+**Is:** the largest section on the page, directly after the hero. A masonry
+gallery of 24 slots, filterable by Bridal / Party / Hair, with a lightbox.
+
+**Why it leads.** For a makeup salon the work *is* the product. Everything
+else on the page is supporting argument, and a bride arriving from Instagram
+has already seen the work — the site's job is to confirm it, not introduce it.
+
+**Why there is no JavaScript in it.** The target is a bride on 3G in
+Sargodha, so the section that could most easily cost 40KB of gallery library
+costs zero:
+
+- **Masonry** is CSS `columns`, not a layout library. No measure pass, no
+  reflow on load, and it collapses to one column at 375px on its own.
+- **Filtering** is radio inputs plus a sibling combinator. It works before
+  hydration, is keyboard operable for free, and the per-category rules are
+  generated from `portfolio.filters` so adding a filter needs no CSS edit.
+- **The lightbox** is `:target`. The browser Back button closes it, which is
+  what a phone user already expects and what a scripted lightbox has to
+  reimplement, usually badly.
+
+Every tile lazy-loads. Tiles without a photograph are not links, and their
+lightboxes are not rendered at all — an empty slot that opens a larger empty
+slot is not a feature.
+
+## R4.2 — Meet Sonia absorbs About
+
+**Was:** an "About" section describing the salon.
+
+**Is:** the same section led by the person. Heading is composed from
+`info.owner`, portrait on one side, story and credentials on the other.
+
+**Why.** A named artist with a face converts better than an anonymous salon,
+and here the person *is* the credential — certified, trained at Kashee's and
+Amina Raja, 49.9K verified. The inverted hierarchy is kept: the label is the
+smallest type in the section and the prose is the largest.
+
+## R4.3 — Testimonials and before/after are built and switched off
+
+**Is:** both components exist; neither renders. `testimonials.verified` and
+`beforeAfter.verified` are false, and the section registry filters them out
+so the nav cannot point at them.
+
+**Why gated rather than filled.** Facebook shows 84% recommend from 5
+reviews. That is real but too thin to quote from without permission, and an
+invented testimonial in front of the client is the worst version of this demo
+failing. Same gate as hours: real data flips one flag.
+
+Before/after is a plain two-up, no drag slider. A slider is a lot of
+JavaScript and a pointer-events surface for a section we may not have paired
+photographs for, and side-by-side reads fine on a phone.
+
+## R4.4 — The Instagram strip says what it is
+
+**Is:** nine hand-picked local files under the heading **"Selected work from
+Instagram"**, with the two confirmed profile numbers beside it.
+
+**Why not "Latest posts".** This is a static export with no Instagram API
+access. Nothing in this strip updates itself, so a "latest" label would be
+false the day after launch — the kind of small lie a visitor notices when the
+top post is a year old. The heading is accurate for as long as the files sit
+there.
+
+The only figures on the page are **49.9K followers** and **1,352 posts**, both
+read from the profile. No "500+ happy clients", no "1000+ looks created" —
+those are unverifiable, and a client who cannot substantiate them is exposed.
+
+## R4.5 — Full-bleed hero with a tested scrim
+
+**Was:** headline in a text column beside a portrait image slot.
+
+**Is:** full-bleed photograph, headline overlaid low in the frame,
+bottom-weighted scrim.
+
+**Why the scrim is measured, not eyeballed.** Overlay text has to hold over a
+photograph nobody has chosen yet. The worst case is a pure-white image, so
+that is what it was sized against — white under the 78% stop composites to
+rgb(56,56,56), and `--color-on-image` (#F7F2EA) on that is **10.52:1**. The
+credential line sits higher, at the 62% stop: **5.56:1** on pure white. Both
+clear AA against the brightest photograph physically possible.
+
+`--color-on-image` is identical in both themes on purpose: the layer beneath
+it is the image, not the page ground, so the theme has no bearing on what is
+legible there.
+
+Until a photograph lands the hero falls back to the page ground with normal
+theme colours. Ivory-on-scrim over an empty placeholder would be illegible in
+light theme and would misrepresent the finished design.
+
+## R4.6 — What was rejected
+
+- **A booking form.** See CLAUDE.md non-goals. WhatsApp is the only booking
+  path; a form splits booking data across two systems and competes with the
+  agent this project exists to demo.
+- **"Why Choose Us" tiles.** Personalised looks, premium products, attention
+  to detail — every competitor claims all three. It says nothing.
+- **A stats block with invented numbers.** Only the two confirmed figures ship.
+- **A luxury tagline.** "Where Beauty Becomes Timeless" and its register were
+  rejected; the existing headline names the city and the wedding week, which
+  is specific and true.
 
 ---
 
