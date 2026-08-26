@@ -12,14 +12,16 @@ import { copy } from "@/config/copy";
  */
 export function StickyCTA() {
   return (
-    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
+    // max-w pins the pill inside the viewport no matter how narrow the
+    // screen or how long the label ever becomes.
+    <div className="fixed bottom-4 right-4 left-4 z-50 flex justify-end sm:bottom-6 sm:right-6 sm:left-auto">
       <WhatsAppCTA
         prefill={copy.cta.generalPrefill}
         label={copy.cta.label}
         size="sm"
         // A ground of its own so the hairline and label stay legible over
         // whatever is scrolling behind it.
-        className="bg-surface/90 backdrop-blur-sm"
+        className="max-w-full bg-surface/90 backdrop-blur-sm"
       />
     </div>
   );

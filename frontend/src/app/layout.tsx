@@ -36,7 +36,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        {/* Raw inline script on purpose. next/script's beforeInteractive
+            strategy does NOT execute inline code before paint — it pushes it
+            into a self.__next_s queue that the Next runtime drains after
+            load, which reintroduces the flash this exists to prevent.
+            A synchronous inline script is the only thing that runs before
+            first paint on a static export. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <SiteHeader />

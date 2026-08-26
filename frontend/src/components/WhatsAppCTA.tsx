@@ -38,7 +38,9 @@ export function WhatsAppCTA({
     size === "lg" ? "px-7 py-4 text-base" : "px-5 py-3 text-[0.9375rem]";
 
   const classes = [
-    "type-cta inline-flex items-center justify-center",
+    // whitespace-nowrap so the label can never wrap and burst the pill if
+    // the button is ever placed in a narrow container.
+    "type-cta inline-flex items-center justify-center whitespace-nowrap",
     "min-h-[44px] rounded-full border border-gold text-fg",
     "transition-colors duration-200 hover:bg-gold/10",
     // The global focus ring is gold, which would sit invisibly on this
