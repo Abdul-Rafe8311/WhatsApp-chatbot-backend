@@ -137,8 +137,16 @@
 (function () {
   "use strict";
 
-  // Change this one line to point the widget at your backend.
-  const API_BASE = "http://127.0.0.1:8000";
+  // Where the backend lives. Precedence:
+  //   1. window.GLOWDESK_API_BASE, if the host page set it before this script ran
+  //   2. the local dev server, when the page itself is served from localhost
+  //   3. the deployed backend
+  const API_BASE = (
+    window.GLOWDESK_API_BASE ||
+    (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+      ? "http://127.0.0.1:8000"
+      : "https://whats-app-chatbot-backend.vercel.app")
+  ).replace(/\/+$/, "");
 
   const SESSION_KEY = "glowdesk_session_id";
   const launcher = document.getElementById("gd-launcher");
