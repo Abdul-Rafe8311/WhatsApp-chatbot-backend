@@ -21,6 +21,7 @@ export const copy = {
   credentialSeparator: " · ",
 
   nav: {
+    work: "Work",
     services: "Services",
     about: "About",
     hours: "Hours & Location",
@@ -100,6 +101,46 @@ export const copy = {
     /** Accessible names — these say what pressing the button will do. */
     toDark: "Switch to dark theme",
     toLight: "Switch to light theme",
+  },
+
+  portfolio: {
+    heading: "Our work",
+    /** Sits under the heading; the work is the argument, so keep it short. */
+    intro: "Bridal, party and colour work from the salon.",
+    filterAllLabel: "All",
+    filterGroupLabel: "Filter work by type",
+    /** Lightbox controls. */
+    openLabel: (name: string) => `View ${name} larger`,
+    closeLabel: "Close",
+  },
+
+  meetSonia: {
+    heading: "Meet Sonia",
+    /** Falls back to the salon name if the owner's name is ever unset. */
+    headingFor: (owner: string) => `Meet ${owner.split(" ")[0]}`,
+  },
+
+  testimonials: {
+    heading: "What brides say",
+  },
+
+  beforeAfter: {
+    heading: "Before & after",
+    beforeLabel: "Before",
+    afterLabel: "After",
+  },
+
+  instagram: {
+    /**
+     * Deliberately NOT "Latest posts". This is a static export with no
+     * Instagram API — these are hand-picked local files that will not update
+     * themselves, and a "latest" label would be a lie the day after launch.
+     */
+    heading: "Selected work from Instagram",
+    followLabel: "Follow on Instagram",
+    /** Composed from the two confirmed profile numbers, nothing invented. */
+    stats: (followers: string, posts: string) =>
+      `${followers} followers · ${posts} posts`,
   },
 
   footer: {

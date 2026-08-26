@@ -40,6 +40,7 @@ export const salon = {
     instagram: "https://www.instagram.com/soniasmakeupsalon/",  // CONFIRMED
     instagramFollowers: "49.9K",                // CONFIRMED (read from profile)
     instagramVerified: true,                    // CONFIRMED (verified badge on profile)
+    instagramPosts: "1,352",                    // CONFIRMED (post count on profile)
     facebook: "https://www.facebook.com/soniasmakeupsalon/",    // CONFIRMED
 
     credentials: [
@@ -270,6 +271,100 @@ export const salon = {
       { day: "Saturday",  open: null, close: null, closed: null },
       { day: "Sunday",    open: null, close: null, closed: null },
     ],
+  },
+  /**
+   * Portfolio. For a makeup salon the work is the product, so this is the
+   * largest section on the page.
+   *
+   * Every image is null until real files land — <SalonImage> renders its
+   * quiet placeholder rather than a broken img, exactly as elsewhere. Ratios
+   * alternate so the masonry columns interlock instead of forming a grid.
+   * Filenames are planned in docs/design-plan.md R4.
+   */
+  portfolio: {
+    /** Filter order. These are portfolio groupings, not service categories. */
+    filters: ["Bridal", "Party", "Hair"] as const,
+    items: [
+    { id: "bridal-01", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-02", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-03", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-04", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-05", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-06", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-07", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-08", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-09", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-10", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-11", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "bridal-12", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "party-01", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "party-02", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "party-03", category: "Party", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "party-04", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "party-05", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "party-06", category: "Party", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "hair-01", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "hair-02", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "hair-03", category: "Hair", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    { id: "hair-04", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "hair-05", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    { id: "hair-06", category: "Hair", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+    ],
+  },
+
+  /**
+   * Instagram strip. This is a static export with no Instagram API access, so
+   * these are local files chosen by hand — NOT a live feed. The heading says
+   * "selected work" rather than "latest posts" because nothing here updates
+   * itself, and claiming otherwise would go stale the day after launch.
+   */
+  instagramStrip: {
+    items: [
+    { id: "ig-01", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-02", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-03", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-04", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-05", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-06", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-07", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-08", image: null as string | null, imageAlt: null as string | null },
+    { id: "ig-09", image: null as string | null, imageAlt: null as string | null },
+    ],
+  },
+
+  /**
+   * Testimonials. Facebook shows 84% recommend from 5 reviews, which is real
+   * but too thin to quote from without permission.
+   *
+   * verified stays false until real quotes are supplied, and the section does
+   * not render at all while it is — the same gate as hours. Nothing here is
+   * ever invented.
+   */
+  testimonials: {
+    verified: false,
+    items: [] as ReadonlyArray<{
+      id: string;
+      quote: string;
+      name: string;
+      event: string | null;
+    }>,
+  },
+
+  /**
+   * Before & after. A plain two-up comparison, no drag slider — the slider is
+   * a lot of JavaScript for a section we may not have paired photographs for.
+   * Renders only when verified is true and pairs exist.
+   */
+  beforeAfter: {
+    verified: false,
+    pairs: [] as ReadonlyArray<{
+      id: string;
+      label: string;
+      beforeImage: string | null;
+      beforeAlt: string | null;
+      afterImage: string | null;
+      afterAlt: string | null;
+    }>,
   },
 } as const;
 
