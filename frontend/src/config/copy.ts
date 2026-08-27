@@ -47,6 +47,15 @@ export const copy = {
 
   services: {
     heading: "Services",
+    /** The standalone /services page, which carries the full menu. */
+    pageHeading: "Services",
+    pageIntro:
+      "The full menu. Prices below are a guide — bridal work is quoted per booking, since it depends on the look, the day, and how many people are being done. Message us for an exact quote.",
+    pageOutro:
+      "Not sure which you need? Message us and we will talk it through.",
+    seeAllLabel: "See all services",
+    /** Shown wherever prices appear, because every figure is an estimate. */
+    priceGuideNote: "Guide prices — confirmed on WhatsApp",
     /**
      * Only Bridal carries a note, and only because its order is real
      * information: the four wedding days run in that sequence. Engagement

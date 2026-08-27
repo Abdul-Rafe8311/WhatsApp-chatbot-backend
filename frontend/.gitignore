@@ -43,3 +43,7 @@ next-env.d.ts
 # Image masters — kept locally, not shipped or committed (3MB of originals).
 # Processed WebP under public/images/ is what deploys.
 /assets/source/
+
+# Generated at build time from src/config/salon.ts by scripts/generate-api.mjs.
+# Not committed: generatedAt changes every build and would churn the diff.
+/public/api/

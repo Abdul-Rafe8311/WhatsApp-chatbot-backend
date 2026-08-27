@@ -13,8 +13,24 @@
  *      without the demo label showing.
  */
 
-/** Rendered wherever a price is not confirmed. Never substitute a figure. */
+/** Rendered wherever a price is not set. */
 export const PRICE_ON_REQUEST = "On request" as const;
+
+/**
+ * PRICES ARE INDICATIVE MARKET ESTIMATES, NOT THE CLIENT'S RATES.
+ *
+ * Every service carries priceEstimated: true. These figures are typical
+ * Pakistani rates for a premium regional bridal salon, added so the demo
+ * does not read as an empty price list in front of the owner. The client
+ * has not quoted any of them.
+ *
+ * Two things follow. The site labels them as guide prices rather than
+ * presenting them as fact, and /api/services.json carries the same flag so
+ * the booking agent quotes them as approximate and offers to confirm.
+ *
+ * Replace with real rates and set priceEstimated: false per service.
+ */
+export const PRICE_CURRENCY = "PKR" as const;
 
 export const salon = {
   info: {
@@ -84,8 +100,9 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Colourful mehndi-day makeup with floral jewellery styling.",
-      priceMin: null,                          // TODO: ask client
-      priceMax: null,
+      priceMin: 15000,
+      priceMax: 25000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,                   // TODO: ask client
       image: "/images/portfolio/mehndi.webp" as string | null,
@@ -98,8 +115,9 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Understated bridal makeup and hair for the nikah ceremony.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 18000,
+      priceMax: 30000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: "/images/portfolio/bridal-04.webp" as string | null,
@@ -112,8 +130,9 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Full bridal makeup, hair styling and dupatta setting for the barat.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 30000,
+      priceMax: 55000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: "/images/portfolio/barat.webp" as string | null,
@@ -126,8 +145,9 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Softer, camera-ready bridal look with hair styling for the walima.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 25000,
+      priceMax: 45000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: "/images/portfolio/walima.webp" as string | null,
@@ -140,8 +160,9 @@ export const salon = {
       category: "Bridal",
       featured: false,
       description: "Makeup and hair for the engagement.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 12000,
+      priceMax: 20000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -155,8 +176,9 @@ export const salon = {
       category: "Party",
       featured: false,
       description: "Event makeup for guests, family and formal occasions.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 5000,
+      priceMax: 10000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -170,8 +192,9 @@ export const salon = {
       category: "Hair",
       featured: true,                          // they call themselves balayage experts — lead with it
       description: "Hand-painted colour that grows out softly, matched to your skin tone.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 10000,
+      priceMax: 20000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -183,8 +206,9 @@ export const salon = {
       category: "Hair",
       featured: false,
       description: "Foil highlights and lowlights.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 7000,
+      priceMax: 15000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -196,8 +220,9 @@ export const salon = {
       category: "Hair",
       featured: false,
       description: "Cut, blow-dry and styling.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 1500,
+      priceMax: 3500,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -209,8 +234,9 @@ export const salon = {
       category: "Hair",
       featured: false,
       description: "Keratin, protein and repair treatments.", // TODO: confirm which they offer
-      priceMin: null,
-      priceMax: null,
+      priceMin: 4000,
+      priceMax: 9000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -224,8 +250,9 @@ export const salon = {
       category: "Skin",
       featured: false,
       description: "Cleansing and brightening facials.", // TODO: confirm the range they offer
-      priceMin: null,
-      priceMax: null,
+      priceMin: 2500,
+      priceMax: 6000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -237,8 +264,9 @@ export const salon = {
       category: "Skin",
       featured: false,
       description: "Eyebrow shaping and face threading.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 300,
+      priceMax: 600,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -250,8 +278,9 @@ export const salon = {
       category: "Skin",
       featured: false,
       description: "Full-body and partial waxing.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 2500,
+      priceMax: 5000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,

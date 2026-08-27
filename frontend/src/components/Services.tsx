@@ -2,6 +2,7 @@ import { SalonImage } from "@/components/SalonImage";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { copy } from "@/config/copy";
 import { CATEGORY_ORDER, salon } from "@/config/salon";
+import { formatPrice } from "@/lib/price";
 
 type Service = (typeof salon.services)[number];
 
@@ -30,7 +31,7 @@ function BridalCard({ service }: { service: Service }) {
           <WhatsAppLink
             prefill={copy.cta.servicePrefill(service.name)}
             ariaLabel={copy.cta.serviceAriaLabel(service.name)}
-            className="after:absolute after:inset-0 after:content-[''] hover:text-gold transition-colors duration-200"
+            className="after:absolute after:inset-0 after:content-[''] text-left hover:text-gold transition-colors duration-200"
           >
             {service.name}
           </WhatsAppLink>
@@ -40,7 +41,7 @@ function BridalCard({ service }: { service: Service }) {
           <p className="type-body text-fg/70">{service.description}</p>
         )}
 
-        <p className="type-data text-fg/65">{service.priceNote}</p>
+        <p className="type-data text-fg/65">{formatPrice(service)}</p>
       </div>
     </li>
   );
@@ -57,11 +58,13 @@ function ServiceRow({ service }: { service: Service }) {
       <WhatsAppLink
         prefill={copy.cta.servicePrefill(service.name)}
         ariaLabel={copy.cta.serviceAriaLabel(service.name)}
-        className="flex min-h-[44px] items-baseline justify-between gap-4 py-3 hover:text-gold transition-colors duration-200"
+        // w-full and text-left: this renders as a <button> while the number
+        // is unset, and buttons shrink-wrap and centre their text.
+        className="flex w-full min-h-[44px] items-baseline justify-between gap-4 py-3 text-left hover:text-gold transition-colors duration-200"
       >
         <span className="type-body">{service.name}</span>
         <span className="type-data shrink-0 text-fg/65">
-          {service.priceNote}
+          {formatPrice(service)}
         </span>
       </WhatsAppLink>
     </li>
@@ -95,7 +98,24 @@ export function Services({ id }: { id: string }) {
   return (
     <section id={id} className="seam bg-surface">
       <div className="wrap flex flex-col gap-14 py-16 sm:py-24">
-        <h2 className="type-h2">{copy.services.heading}</h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+          <div className="flex flex-col gap-1">
+            <h2 className="type-h2">{copy.services.heading}</h2>
+            {/* Every figure is an estimate, so it is labelled as one rather
+                than presented as the salon's rate. */}
+            <p className="type-meta text-fg/65">
+              {copy.services.priceGuideNote}
+            </p>
+          </div>
+          {/* Recessive by design — the full menu is a detail page, not a
+              second call to action competing with the three pills. */}
+          <a
+            href="/services/"
+            className="type-meta text-label inline-flex min-h-[44px] items-center hover:text-gold transition-colors duration-200"
+          >
+            {copy.services.seeAllLabel}
+          </a>
+        </div>
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-1">
