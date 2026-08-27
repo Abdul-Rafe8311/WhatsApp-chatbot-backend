@@ -49,10 +49,16 @@ export function WhatsAppCTA({
     // the button is ever placed in a narrow container.
     "type-cta inline-flex items-center justify-center whitespace-nowrap",
     "min-h-[44px] rounded-full border",
+    // Filled on hover AND focus-visible, so a keyboard user gets the same
+    // affordance as a pointer user. The label flips to --surface rather than
+    // --fg: on the light theme the gold is a deep bronze and near-black text
+    // on it measures only 3.76:1, while paper on the same bronze is 4.71:1.
+    // Because --surface flips with the theme, one pair of classes is legible
+    // on both the bronze and the bright gold.
     tone === "onImage"
-      ? "border-gold-on-image text-on-image hover:bg-on-image/10"
-      : "border-gold text-fg hover:bg-gold/10",
-    "transition-colors duration-200",
+      ? "border-gold-on-image text-on-image hover:bg-gold-on-image hover:text-scrim-ink focus-visible:bg-gold-on-image focus-visible:text-scrim-ink"
+      : "border-gold text-fg hover:bg-gold hover:text-surface focus-visible:bg-gold focus-visible:text-surface",
+    "transition-colors duration-200 ease-out",
     // The global focus ring is gold, which would sit invisibly on this
     // element's own gold border. Ivory at a wider offset instead.
     tone === "onImage"

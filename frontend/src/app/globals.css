@@ -23,6 +23,10 @@
      dark scrim it disappears. This is the brighter gold, fixed in both
      themes for the same reason --color-on-image is. */
   --color-gold-on-image: #be9b4d;
+  /* The same ink the light theme uses for text, pinned. Needed as the label
+     colour when a CTA fills with gold over a photograph, where --surface
+     would resolve to paper and fail contrast. */
+  --color-scrim-ink: #170e11;
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
@@ -181,12 +185,26 @@
      black scrim composites to ~#383838, which carries --color-on-image well
      past AA. Bottom-weighted because the headline sits low in the frame. */
   .hero-scrim {
-    background: linear-gradient(
+    /* Directional, and sized from measurement rather than taste.
+       "to top", so 0% is the bottom edge.
+
+       The constraint: the brightest pixels in this photograph are blown-out
+       white roses, and cream text over pure white needs the scrim at 56%
+       alpha to clear AA. The headline is four lines of display type — at
+       1440 it spans y 0.33 to 0.69 of the hero, and the credential runs to
+       0.78 — so the band that must hold 56%+ is the lower two thirds.
+
+       Hence: held above 0.64 through the whole text band, then a fast fall
+       to fully transparent by the top fifth. Unlike the previous scrim,
+       which never reached zero and sat at 24% over the entire frame, the top
+       of the photograph is now completely untouched. */
+    background-image: linear-gradient(
       to top,
-      rgb(0 0 0 / 0.78) 0%,
-      rgb(0 0 0 / 0.62) 32%,
-      rgb(0 0 0 / 0.38) 62%,
-      rgb(0 0 0 / 0.24) 100%
+      rgb(0 0 0 / 0.76) 0%,
+      rgb(0 0 0 / 0.72) 45%,
+      rgb(0 0 0 / 0.66) 68%,
+      rgb(0 0 0 / 0.30) 78%,
+      rgb(0 0 0 / 0) 88%
     );
   }
 
