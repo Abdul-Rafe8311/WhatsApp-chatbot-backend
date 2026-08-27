@@ -88,8 +88,9 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,                   // TODO: ask client
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/mehndi.webp" as string | null,
+      imageAlt:
+        "Mehndi-day bridal look: mustard-green embroidered outfit and gold-bordered dupatta, pink fresh flowers braided through a side plait, green and gold kundan jewellery" as string | null,
     },
     {
       id: "nikah",
@@ -101,8 +102,9 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/bridal-04.webp" as string | null,
+      imageAlt:
+        "Bridal look in a bottle-green lehenga embroidered with pink and coral florals, a sage net dupatta, layered kundan and gold-bead necklaces, with deep red henna on the hands" as string | null,
     },
     {
       id: "barat",
@@ -114,8 +116,9 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/barat.webp" as string | null,
+      imageAlt:
+        "Barat bridal look: deep red and gold hand-embroidered lehenga with a rose-gold dupatta, layered gold choker and jhumka earrings, with deep henna on the hands" as string | null,
     },
     {
       id: "walima",
@@ -127,8 +130,9 @@ export const salon = {
       priceMax: null,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/walima.webp" as string | null,
+      imageAlt:
+        "Walima bridal look: pale ice-blue outfit worked in silver and pearl with a matching net dupatta over the head, a fine gold necklace, and warm bronze smoky eyes" as string | null,
     },
     {
       id: "engagement",
