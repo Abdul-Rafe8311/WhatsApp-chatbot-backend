@@ -53,12 +53,15 @@ export const salon = {
      * a broken <img>. Drop a file in public/images/ and set the path here;
      * alt text is required alongside it. See docs/design-plan.md §5.
      */
-    heroImage: null as string | null,          // TODO: /images/hero-bridal.webp
-    heroImageAlt: null as string | null,
-    aboutImage: null as string | null,         // TODO: /images/about-sonia.webp
-    aboutImageAlt: null as string | null,
-    locationImage: null as string | null,      // TODO: /images/location-salon.webp
-    locationImageAlt: null as string | null,
+    heroImage: "/images/hero.webp" as string | null,
+    heroImageAlt:
+      "The salon's carved wooden Sonia's sign, raised lettering on a gold-washed panel, banked with cream roses" as string | null,
+    aboutImage: "/images/about-sonia.webp" as string | null,
+    aboutImageAlt:
+      "Sonia Shabbir in a deep pink kurta and sequinned dupatta, long caramel-balayaged hair worn loose, wearing a pearl necklace with an ornate pendant" as string | null,
+    locationImage: "/images/location-salon.webp" as string | null,
+    locationImageAlt:
+      "The salon shopfront in Sargodha: gold Sonia's Makeup Salon lettering on a black fascia above a grey stone facade" as string | null,
 
     parkingNote: "",                           // TODO: ask client
     paymentMethods: [],                        // TODO: ask client — likely Cash, Easypaisa, JazzCash
@@ -273,63 +276,76 @@ export const salon = {
     ],
   },
   /**
-   * Portfolio. For a makeup salon the work is the product, so this is the
-   * largest section on the page.
+   * REDUCED DEMO SET. Six slots, not the twenty-four the full build plans.
+   * This is a pitch shown to the salon owner, and thirty-seven photographs
+   * is more than anyone will source before that meeting.
    *
-   * Every image is null until real files land — <SalonImage> renders its
-   * quiet placeholder rather than a broken img, exactly as elsewhere. Ratios
-   * alternate so the masonry columns interlock instead of forming a grid.
-   * Filenames are planned in docs/design-plan.md R4.
+   * The full manifest is in docs/design-plan.md R4 and R5. Scaling back up
+   * is adding entries here: no component change, no CSS change. The section
+   * derives its column count, its filter and which tiles to show from
+   * whatever this array holds.
+   *
+   * Three Bridal slots are filled. Party and Hair are empty, so they render
+   * nothing and the filter hides itself — a filter whose buttons lead to
+   * empty grids is worse than no filter.
    */
   portfolio: {
     /** Filter order. These are portfolio groupings, not service categories. */
     filters: ["Bridal", "Party", "Hair"] as const,
     items: [
-    { id: "bridal-01", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-02", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-03", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-04", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-05", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-06", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-07", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-08", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-09", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-10", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-11", category: "Bridal", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "bridal-12", category: "Bridal", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "party-01", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "party-02", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "party-03", category: "Party", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "party-04", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "party-05", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "party-06", category: "Party", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "hair-01", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "hair-02", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "hair-03", category: "Hair", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
-    { id: "hair-04", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "hair-05", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
-    { id: "hair-06", category: "Hair", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+      {
+        id: "bridal-01",
+        category: "Bridal",
+        ratio: "4:5",
+        image: "/images/portfolio/mehndi.webp" as string | null,
+        imageAlt:
+          "Mehndi-day bridal look: mustard-green embroidered outfit and gold-bordered dupatta, pink fresh flowers braided through a side plait, green and gold kundan maang tikka, jhumka earrings and choker, with pink blush and warm smoky eyes" as string | null,
+      },
+      {
+        id: "bridal-02",
+        category: "Bridal",
+        ratio: "4:5",
+        image: "/images/portfolio/barat.webp" as string | null,
+        imageAlt:
+          "Barat bridal look: deep red and gold hand-embroidered lehenga with a rose-gold dupatta, layered gold choker, jhumka earrings and a red-stone maang tikka, with deep henna on the hands" as string | null,
+      },
+      {
+        id: "bridal-03",
+        category: "Bridal",
+        ratio: "1:1",
+        image: "/images/portfolio/walima.webp" as string | null,
+        imageAlt:
+          "Walima bridal look: pale ice-blue outfit worked in silver and pearl with a matching net dupatta over the head, a fine gold necklace, and warm bronze smoky eyes" as string | null,
+      },
+      {
+        id: "bridal-04",
+        category: "Bridal",
+        ratio: "4:5",
+        image: "/images/portfolio/bridal-04.webp" as string | null,
+        imageAlt:
+          "Bridal look in a bottle-green lehenga embroidered with pink and coral florals, a sage net dupatta, layered kundan and gold-bead necklaces, a kundan maang tikka and green-drop jhumka earrings, with deep red henna on the hands" as string | null,
+      },
+      { id: "party-01", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+      { id: "party-02", category: "Party", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+      { id: "hair-01", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
     ],
   },
 
   /**
-   * Instagram strip. This is a static export with no Instagram API access, so
-   * these are local files chosen by hand — NOT a live feed. The heading says
-   * "selected work" rather than "latest posts" because nothing here updates
-   * itself, and claiming otherwise would go stale the day after launch.
+   * CUT FOR THE DEMO. Empty, so neither the section nor its nav entry
+   * renders — the same gate every other unconfirmed section uses.
+   *
+   * No files were allocated to it, so it would have been nine empty
+   * placeholders under a heading, duplicating the portfolio job with none
+   * of its content. The follower count, post count and follow link already
+   * appear in Meet Sonia, so nothing is lost.
    */
   instagramStrip: {
-    items: [
-    { id: "ig-01", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-02", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-03", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-04", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-05", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-06", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-07", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-08", image: null as string | null, imageAlt: null as string | null },
-    { id: "ig-09", image: null as string | null, imageAlt: null as string | null },
-    ],
+    items: [] as ReadonlyArray<{
+      id: string;
+      image: string | null;
+      imageAlt: string | null;
+    }>,
   },
 
   /**

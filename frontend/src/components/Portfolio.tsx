@@ -25,11 +25,36 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
  * the 3G budget on its own.
  */
 export function Portfolio({ id }: { id: string }) {
-  const { filters, items } = salon.portfolio;
+  const { filters } = salon.portfolio;
+  const all: ReadonlyArray<Item> = salon.portfolio.items;
+  const filled = all.filter((item) => item.image);
 
-  // Only the filter that is checked stays visible. Generated rather than
-  // hand-written so config stays the single source of the category list.
-  const filterCss = filters
+  /**
+   * Once any photograph exists, render only the slots that have one.
+   *
+   * Real photographs mixed with empty placeholders is the one arrangement
+   * that reads as broken — a page that failed to load rather than a page
+   * still being built. All-empty reads as a deliberate design preview, and
+   * all-filled reads as a gallery. Never both at once.
+   *
+   * This is why a partial image set degrades cleanly: the config can declare
+   * far more slots than there are files, and the section simply shows what
+   * exists.
+   */
+  const items = filled.length > 0 ? filled : all;
+
+  // A filter with one populated category has nothing to do, and a filter
+  // whose buttons lead to empty grids is worse than no filter.
+  const present = filters.filter((f) =>
+    items.some((item) => item.category === f),
+  );
+  const showFilter = present.length > 1;
+
+  // Three columns needs enough tiles to fill them or the masonry reads as a
+  // thin row. Derived from the item count, not hardcoded.
+  const few = items.length <= 4;
+
+  const filterCss = present
     .map(
       (f) =>
         `#pf-${slug(f)}:checked ~ .pf-grid > li:not([data-cat="${f}"]){display:none}`,
@@ -44,9 +69,10 @@ export function Portfolio({ id }: { id: string }) {
           <p className="type-body text-fg/70">{copy.portfolio.intro}</p>
         </div>
 
-        <style>{filterCss}</style>
+        {showFilter && <style>{filterCss}</style>}
 
         <div>
+          {showFilter && (
           <fieldset className="border-0 p-0">
             <legend className="sr-only">
               {copy.portfolio.filterGroupLabel}
@@ -61,7 +87,7 @@ export function Portfolio({ id }: { id: string }) {
               defaultChecked
               className="pf-input sr-only"
             />
-            {filters.map((f) => (
+            {present.map((f) => (
               <input
                 key={f}
                 type="radio"
@@ -78,7 +104,7 @@ export function Portfolio({ id }: { id: string }) {
               >
                 {copy.portfolio.filterAllLabel}
               </label>
-              {filters.map((f) => (
+              {present.map((f) => (
                 <label
                   key={f}
                   htmlFor={`pf-${slug(f)}`}
@@ -89,8 +115,9 @@ export function Portfolio({ id }: { id: string }) {
               ))}
             </div>
           </fieldset>
+          )}
 
-          <ul className="pf-grid">
+          <ul className={`pf-grid${few ? " pf-grid--few" : ""}`}>
             {items.map((item: Item) => (
               <li key={item.id} data-cat={item.category}>
                 {item.image ? (

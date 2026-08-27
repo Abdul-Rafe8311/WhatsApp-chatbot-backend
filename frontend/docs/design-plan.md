@@ -1,6 +1,8 @@
 # Design plan — Sonia's Makeup Salon
 
-Status: **built, revised three times.** Revision 4 adds the portfolio, the
+Status: **built, revised four times.** Revision 5 temporarily reduces the
+image set for a pitch demo and is scaffolding, not a design decision —
+Revision 4 remains the target. Revision 4 adds the portfolio, the
 person-led about section, the gated testimonial and before/after components,
 the Instagram strip and the full-bleed hero. Revision 3 supersedes Revision 2 on
 colour and adds theming; Revision 2 supersedes the colour,
@@ -11,6 +13,78 @@ out to be wrong are the useful part.
 ---
 
 ---
+
+---
+
+---
+
+# Revision 5 — reduced demo set (temporary)
+
+**This revision is scaffolding for a pitch, not a design decision.** The build
+is being shown to the salon owner to win the work; thirty-seven photographs is
+more than anyone will source before that meeting. Revision 4's manifest is the
+real target and nothing here replaces it.
+
+## R5.1 — Portfolio renders only what exists
+
+**Was:** every declared slot rendered, filled or not.
+
+**Is:** once any photograph exists, only the slots that have one are rendered.
+With no photographs at all, every slot renders as a placeholder.
+
+**Why, and this is the load-bearing part.** The question was whether six slots
+with three filled still reads as intentional. It does not — but the problem is
+not the count, it is the *mix*. Three photographs alone read as a small
+curated gallery. Six empty tonal panels read as a deliberate design preview.
+Three of each reads as a page that failed to load. The one arrangement to
+avoid is real photographs sitting beside empty placeholders.
+
+So the section never produces that arrangement. Three consequences fall out:
+
+- The config may declare far more slots than there are files. A partial set
+  degrades to a smaller, complete-looking gallery instead of a broken one.
+- The **filter hides itself** when fewer than two categories have content. A
+  filter whose buttons lead to empty grids is worse than no filter — with only
+  bridal photographs, no filter appears at all.
+- The masonry drops to **two columns at four tiles or fewer**, derived from the
+  item count. Three tiles across three columns is a thin row, not a gallery.
+
+Verified across all three states — 0 files: 6 placeholder tiles, no images, no
+lightboxes. 3 files: 3 tiles, 3 lightboxes, filter hidden, two columns. 6
+files: 6 tiles, 6 lightboxes, filter shown, three columns.
+
+## R5.2 — Portfolio cut to six slots
+
+**Was:** 24 slots — 12 Bridal, 6 Party, 6 Hair.
+
+**Is:** 6 slots — 3 Bridal, 2 Party, 1 Hair.
+
+Scaling back up is adding entries to `portfolio.items`. No component change,
+no CSS change: the column count, the filter and which tiles render are all
+derived from whatever the config holds. The full manifest stays in R4 so the
+larger version is not lost.
+
+## R5.3 — Instagram strip cut from the demo
+
+**Was:** nine hand-picked tiles with the confirmed profile figures.
+
+**Is:** `instagramStrip.items` is empty, so neither the section nor its nav
+entry renders — the same gate every other unconfirmed section uses.
+
+**Why cut rather than shrink.** No files were allocated to it, so it would
+have been six or nine empty placeholders under a heading, duplicating the
+portfolio's job with none of its content. The follower count, post count and
+follow link already appear in Meet Sonia, so nothing is actually lost.
+
+The component, its honest "selected work" heading and the registry gate all
+remain. Bringing it back is adding entries to the array.
+
+## R5.4 — Unchanged
+
+Testimonials and before/after stay built and gated: correct for a demo, and
+correct until real quotes and paired photographs exist. Empty-slot handling is
+unchanged — non-linking tiles, no lightbox on an empty slot. Single WhatsApp
+gate, three prominent CTAs, registry-driven nav, never render from a null.
 
 ---
 

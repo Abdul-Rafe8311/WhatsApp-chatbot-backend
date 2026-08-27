@@ -55,7 +55,11 @@ export function Hero({ id }: { id: string }) {
           {credentialLine}
         </p>
 
-        <WhatsAppCTA prefill={copy.cta.generalPrefill} label={copy.cta.label} />
+        <WhatsAppCTA
+          prefill={copy.cta.generalPrefill}
+          label={copy.cta.label}
+          tone={hasImage ? "onImage" : "default"}
+        />
       </div>
     </section>
   );

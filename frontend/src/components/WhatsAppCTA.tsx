@@ -8,6 +8,12 @@ type Props = {
   /** Defaults to the visible label; set where several CTAs share one. */
   ariaLabel?: string;
   size?: Size;
+  /**
+   * "onImage" swaps to the photograph palette. The default tone uses text-fg,
+   * which is near-black in the light theme and would vanish on the hero's
+   * dark scrim.
+   */
+  tone?: "default" | "onImage";
   className?: string;
 };
 
@@ -32,6 +38,7 @@ export function WhatsAppCTA({
   label,
   ariaLabel,
   size = "lg",
+  tone = "default",
   className = "",
 }: Props) {
   const sizing =
@@ -41,11 +48,16 @@ export function WhatsAppCTA({
     // whitespace-nowrap so the label can never wrap and burst the pill if
     // the button is ever placed in a narrow container.
     "type-cta inline-flex items-center justify-center whitespace-nowrap",
-    "min-h-[44px] rounded-full border border-gold text-fg",
-    "transition-colors duration-200 hover:bg-gold/10",
+    "min-h-[44px] rounded-full border",
+    tone === "onImage"
+      ? "border-gold-on-image text-on-image hover:bg-on-image/10"
+      : "border-gold text-fg hover:bg-gold/10",
+    "transition-colors duration-200",
     // The global focus ring is gold, which would sit invisibly on this
     // element's own gold border. Ivory at a wider offset instead.
-    "focus-visible:outline-fg focus-visible:outline-offset-4",
+    tone === "onImage"
+      ? "focus-visible:outline-on-image focus-visible:outline-offset-4"
+      : "focus-visible:outline-fg focus-visible:outline-offset-4",
     sizing,
     className,
   ].join(" ");

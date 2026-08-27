@@ -19,6 +19,10 @@
      underneath is the image, not the page, so the theme has no bearing on
      what is legible. */
   --color-on-image: #f7f2ea;
+  /* The light theme's gold is a deep bronze for contrast on paper; over a
+     dark scrim it disappears. This is the brighter gold, fixed in both
+     themes for the same reason --color-on-image is. */
+  --color-gold-on-image: #be9b4d;
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
@@ -202,6 +206,9 @@
   }
   @media (min-width: 1024px) {
     .pf-grid { columns: 3; }
+    /* Too few tiles to fill three columns reads as a thin row rather than a
+       gallery. The modifier is applied from the item count, not hardcoded. */
+    .pf-grid.pf-grid--few { columns: 2; }
   }
 
   /* ---- Portfolio filter -------------------------------------------------
