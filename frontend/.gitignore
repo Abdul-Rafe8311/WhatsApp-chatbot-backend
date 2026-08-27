@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Image masters — kept locally, not shipped or committed (3MB of originals).
+# Processed WebP under public/images/ is what deploys.
+/assets/source/
