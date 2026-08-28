@@ -38,6 +38,9 @@ type Message = {
 
 const SESSION_KEY = "sonias_chat_session";
 
+/** Dispatch this on `window` to open the widget from elsewhere on the page. */
+export const OPEN_CHAT_EVENT = "sonias:open-chat";
+
 function clock(): string {
   const d = new Date();
   return `${String(d.getHours()).padStart(2, "0")}:${String(
@@ -102,6 +105,17 @@ export function ChatWidget() {
     const log = logRef.current;
     if (log) log.scrollTop = log.scrollHeight;
   }, [messages, busy]);
+
+  // Any part of the page can ask for the widget by name. A window event
+  // rather than lifted state or a context: the widget stays self-contained,
+  // and a caller that is unmounted or never rendered simply has no effect.
+  useEffect(() => {
+    function onOpen() {
+      setOpen(true);
+    }
+    window.addEventListener(OPEN_CHAT_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_CHAT_EVENT, onOpen);
+  }, []);
 
   // Escape closes, and focus returns to the launcher rather than being left
   // on a hidden element.

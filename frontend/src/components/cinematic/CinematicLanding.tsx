@@ -1,24 +1,15 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
-import {
-  BEATS,
-  STAGE_HEIGHT_CLASS,
-  type Beat,
-} from "@/lib/stage";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { STAGE_HEIGHT_CLASS } from "@/lib/stage";
 import { useIsCompact, usePrefersReducedMotion } from "@/lib/viewport";
 import { ScrollDebug } from "@/components/cinematic/ScrollDebug";
 import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
 import { Arrival } from "@/components/cinematic/Arrival";
 import { ServicesBeat } from "@/components/cinematic/ServicesBeat";
 import { GalleryBeat } from "@/components/cinematic/GalleryBeat";
+import { BookingBeat } from "@/components/cinematic/BookingBeat";
 
 /**
  * SCAFFOLD — structure only, no styling yet.
@@ -109,13 +100,7 @@ export function CinematicLanding({
             <Arrival progress={smoothed} />
             <ServicesBeat progress={smoothed} />
             <GalleryBeat progress={smoothed} />
-
-            {/* Not yet built. Booking is next. */}
-            {BEATS.filter(
-              (b) => !["arrival", "services", "gallery", "contact"].includes(b.id),
-            ).map((beat) => (
-              <BeatPanel key={beat.id} beat={beat} progress={smoothed} />
-            ))}
+            <BookingBeat progress={smoothed} />
           </motion.div>
         </div>
       </div>
@@ -129,43 +114,5 @@ export function CinematicLanding({
         reducedMotion={reducedMotion}
       />
     </>
-  );
-}
-
-/**
- * One beat's placeholder. Its own component so each can call useTransform
- * without hooks running in a loop body whose length could change.
- *
- * Fades in over the first fifth of its range and out over the last fifth, so
- * adjacent beats cross-fade rather than cutting.
- */
-function BeatPanel({
-  beat,
-  progress,
-}: {
-  beat: Beat;
-  progress: MotionValue<number>;
-}) {
-  const [start, end] = beat.range;
-  const ramp = (end - start) * 0.2;
-
-  const opacity = useTransform(
-    progress,
-    [start, start + ramp, end - ramp, end],
-    [0, 1, 1, 0],
-  );
-  // Slide is small and in transform space only.
-  const y = useTransform(progress, [start, end], ["24px", "-24px"]);
-
-  return (
-    <motion.div
-      style={{ opacity, y }}
-      className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-    >
-      <p className="type-h2">{beat.label}</p>
-      <p className="type-meta text-label">
-        beat {beat.range[0]} – {beat.range[1]}
-      </p>
-    </motion.div>
   );
 }

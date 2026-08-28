@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
+import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
 import { formatPrice } from "@/lib/price";
@@ -145,7 +146,20 @@ function ServiceCard({
       // at 3.81:1 — under AA for its size. /40 is the least that clears it.
       className="flex flex-col gap-1 rounded-xl border border-gold-on-image/40 bg-black/40 p-3 backdrop-blur-[2px] sm:gap-1.5 sm:p-4"
     >
-      <h3 className="type-card-title">{name}</h3>
+      {/* The link wraps the name, never the card: WhatsAppLink's children must
+          be phrasing content, and a heading may wrap it but not the reverse.
+          Same gate as every other WhatsApp destination on the site — while the
+          number is not dialable this renders an inert button, styled
+          identically, so the card never changes shape when the gate opens. */}
+      <h3 className="type-card-title">
+        <WhatsAppLink
+          prefill={copy.cta.servicePrefill(name)}
+          ariaLabel={copy.cta.serviceAriaLabel(name)}
+          className="text-left underline-offset-4 hover:underline focus-visible:outline-on-image focus-visible:outline-offset-4"
+        >
+          {name}
+        </WhatsAppLink>
+      </h3>
       {/* The line that explains the service is the first thing to go when
           there is no room for it — the name and the price are the payload. */}
       <p className="type-body hidden text-[0.9375rem] text-on-image/85 sm:block">

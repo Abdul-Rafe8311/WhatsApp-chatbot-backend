@@ -181,6 +181,17 @@ export const copy = {
      * direction, and anything longer competes with the name above it.
      */
     scrollCue: "Scroll",
+
+    booking: {
+      /** The station where the walk stops and the visitor is asked to act. */
+      heading: "Book your date",
+      /**
+       * While the WhatsApp number is unset the pill is inert, so the chat
+       * widget is the only route that actually reaches the salon. This names
+       * it rather than leaving a dead button as the only visible option.
+       */
+      chatLabel: "Ask the booking assistant",
+    },
   },
 
   footer: {
