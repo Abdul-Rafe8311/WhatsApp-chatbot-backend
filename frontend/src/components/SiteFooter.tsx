@@ -40,7 +40,7 @@ const SERVICE_LINKS = salon.services.slice(0, 5).map((service) => ({
 export function SiteFooter() {
   return (
     <footer className="seam relative isolate overflow-hidden bg-surface">
-      <div className="wrap relative z-10 grid gap-10 pt-16 pb-40 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:pt-20 lg:pb-48">
+      <div className="wrap relative z-10 grid gap-10 pt-16 pb-28 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:pt-20 lg:pb-32">
         {/* Brand */}
         <div className="flex flex-col gap-4">
           <Wordmark className="text-2xl" />
@@ -140,23 +140,50 @@ export function SiteFooter() {
       </div>
 
       {/*
-        Watermark. Decorative, so out of the accessibility tree entirely.
+        Watermark — the wordmark oversized, behind the columns, bleeding off
+        the bottom edge.
 
-        Two things keep it from touching contrast on the columns above:
-        select-none plus aria-hidden means it is never read or selected, and it
-        sits at z-0 under a z-10 content layer at 4% of the foreground — below
-        the 1.02:1 that would register as a contrast change on text.
+        SVG with textLength rather than a sized <span>: a font-size in vw makes
+        the word a width the container did not choose, so it was overflowing
+        and getting clipped mid-letter on the right. textLength pins the text
+        to exactly the viewBox width and lengthAdjust="spacing" opens the
+        letter-spacing to get there — glyph shapes are untouched, so the serif
+        does not stretch. The word therefore always fits the width exactly, at
+        any viewport, with no measurement and no overflow.
 
-        Sized with clamp and capped in vw, then the whole footer clips
-        overflow, so bleeding off the lower edge never widens the document.
+        Only the bottom is cropped: translate-y pushes the lower part of the
+        letterforms past the footer's edge, which clips them.
+
+        Decorative, so aria-hidden and select-none — never read, never
+        selected, never a tab stop.
+
+        The apostrophe is normalised here. salon.info.name carries a straight
+        ASCII quote (U+0027); <Wordmark> quietly substitutes a curly one at
+        render, so using the raw string put a straight quote next to curly ones
+        everywhere else. Fixing it at source would change the name string the
+        API contract publishes, so it is normalised at the point of display.
       */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center overflow-hidden select-none"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 select-none overflow-hidden"
       >
-        <span className="translate-y-[22%] whitespace-nowrap font-display leading-none text-fg/[0.04] text-[clamp(5rem,26vw,20rem)]">
-          {salon.info.name.split(" ")[0]}
-        </span>
+        <svg
+          viewBox="0 0 1000 210"
+          className="w-full translate-y-[26%] fill-current text-fg/[0.24]"
+          role="presentation"
+          focusable="false"
+        >
+          <text
+            x="0"
+            y="168"
+            textLength="1000"
+            lengthAdjust="spacing"
+            className="font-display"
+            style={{ fontSize: "200px", fontWeight: 600 }}
+          >
+            {salon.info.name.split(" ")[0].replace(/'/g, "\u2019")}
+          </text>
+        </svg>
       </div>
 
       {/* Clearance for the fixed sticky CTA so it never covers the last row. */}
