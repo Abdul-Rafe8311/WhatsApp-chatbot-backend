@@ -175,6 +175,14 @@ export const copy = {
       `${followers} followers · ${posts} posts`,
   },
 
+  cinematic: {
+    /**
+     * The scroll cue under the salon name. One word: the chevron carries the
+     * direction, and anything longer competes with the name above it.
+     */
+    scrollCue: "Scroll",
+  },
+
   footer: {
     instagram: "Instagram",
     facebook: "Facebook",

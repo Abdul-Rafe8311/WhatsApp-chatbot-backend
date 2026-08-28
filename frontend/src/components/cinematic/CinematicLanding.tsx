@@ -15,6 +15,8 @@ import {
 } from "@/lib/stage";
 import { useIsCompact, usePrefersReducedMotion } from "@/lib/viewport";
 import { ScrollDebug } from "@/components/cinematic/ScrollDebug";
+import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
+import { Arrival } from "@/components/cinematic/Arrival";
 
 /**
  * SCAFFOLD — structure only, no styling yet.
@@ -65,11 +67,6 @@ export function CinematicLanding({
   // Background depth. Disabled on compact viewports per the brief, by feeding
   // the transform a constant instead of branching on the hook result — the
   // number of hooks called must not depend on viewport width.
-  const bgScale = useTransform(
-    smoothed,
-    [0, 0.15, 0.75],
-    isCompact ? [1, 1, 1] : [1.15, 1, 1.06],
-  );
   const bgY = useTransform(
     smoothed,
     [0, 1],
@@ -95,22 +92,24 @@ export function CinematicLanding({
             style={{ opacity: stageOpacity }}
             className="relative h-full w-full"
           >
-            {/* Background layer. will-change lives here and nowhere else —
-                it is the only element transforming for the whole scroll. */}
+            {/* Walkthrough frames carry their own depth, so the outer
+                parallax wrapper is gone; each frame scales independently. */}
             <motion.div
-              style={{ scale: bgScale, y: bgY, willChange: "transform" }}
+              style={{ y: bgY, willChange: "transform" }}
               className="absolute inset-0 bg-surface-2"
-              aria-hidden="true"
             >
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="type-meta text-label">
-                  background layer — parallax{" "}
-                  {isCompact ? "OFF (compact)" : "ON"}
-                </span>
-              </div>
+              <WalkthroughBackground
+                progress={smoothed}
+                isCompact={isCompact}
+              />
             </motion.div>
 
-            {BEATS.filter((b) => b.id !== "contact").map((beat) => (
+            <Arrival progress={smoothed} />
+
+            {/* Not yet built. Services is next. */}
+            {BEATS.filter(
+              (b) => !["arrival", "contact"].includes(b.id),
+            ).map((beat) => (
               <BeatPanel key={beat.id} beat={beat} progress={smoothed} />
             ))}
           </motion.div>
