@@ -17,6 +17,7 @@ import { useIsCompact, usePrefersReducedMotion } from "@/lib/viewport";
 import { ScrollDebug } from "@/components/cinematic/ScrollDebug";
 import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
 import { Arrival } from "@/components/cinematic/Arrival";
+import { ServicesBeat } from "@/components/cinematic/ServicesBeat";
 
 /**
  * SCAFFOLD — structure only, no styling yet.
@@ -105,10 +106,11 @@ export function CinematicLanding({
             </motion.div>
 
             <Arrival progress={smoothed} />
+            <ServicesBeat progress={smoothed} />
 
-            {/* Not yet built. Services is next. */}
+            {/* Not yet built. Gallery is next. */}
             {BEATS.filter(
-              (b) => !["arrival", "contact"].includes(b.id),
+              (b) => !["arrival", "services", "contact"].includes(b.id),
             ).map((beat) => (
               <BeatPanel key={beat.id} beat={beat} progress={smoothed} />
             ))}

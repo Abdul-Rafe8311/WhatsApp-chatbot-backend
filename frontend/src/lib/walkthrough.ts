@@ -32,11 +32,11 @@ export const WALKTHROUGH: readonly WalkthroughFrame[] = [
   },
   {
     src: "/images/walkthrough/stage-02.webp",
-    // Half the resolution of its neighbours. Upscaled to the same box, so it
-    // is the one frame that can look soft on a high-density screen.
-    width: 688,
-    height: 387,
-    note: "Second step in. LOW RES — regenerate at 1376x768 to match.",
+    width: 1376,
+    height: 768,
+    // Dead-centre symmetrical composition: a pure scale push reads as a zoom
+    // rather than forward travel, so this frame also drifts horizontally.
+    note: "Second step in. Symmetrical — carries a drift, see DRIFT_FRAMES.",
   },
   {
     src: "/images/walkthrough/stage-03.webp",
@@ -100,6 +100,24 @@ export function frameScaleRange(index: number, count: number): [number, number] 
   const f = WALKTHROUGH_FADE;
   return [start + index * seg - f, start + (index + 1) * seg + f];
 }
+
+/**
+ * Frames that drift sideways as well as scaling, keyed by index.
+ *
+ * A centred scale on a mirror-symmetric composition produces no lateral cue,
+ * so it reads as a zoom rather than as walking forward. Measured on the actual
+ * pixels: stage-02 has a mirror difference of 10.8 against 36–50 for every
+ * other frame, roughly three and a half times more symmetrical, so it is the
+ * only frame that needs this.
+ *
+ * Kept under the smallest overflow the frame has at its minimum scale (2% per
+ * side at scale 1.04, before object-cover's own crop), so drifting can never
+ * expose an edge.
+ */
+export const DRIFT_FRAMES: Readonly<Record<number, readonly [string, string]>> =
+  {
+    1: ["-2%", "2%"],
+  };
 
 /** Which frame is nearest to on-screen, used to decide what to preload next. */
 export function frameIndexAt(progress: number, count: number): number {

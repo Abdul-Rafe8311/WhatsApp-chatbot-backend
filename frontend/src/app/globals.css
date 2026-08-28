@@ -208,6 +208,25 @@
     );
   }
 
+  /* Full-frame scrim for the cinematic stage.
+
+     Unlike .hero-scrim this is near-uniform. That scrim is bottom-weighted
+     because the hero's type sits in a band at the bottom and the top of the
+     photograph is deliberately left untouched. The service cards fill the
+     frame instead, so there is no region that can be left clear — and the
+     walkthrough interiors are pale, which is the worst case for cream type.
+
+     Alpha is set from measurement, not taste: see the contrast figures in the
+     Services beat commit. */
+  .stage-scrim {
+    background-image: linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.72) 0%,
+      rgb(0 0 0 / 0.66) 50%,
+      rgb(0 0 0 / 0.62) 100%
+    );
+  }
+
   /* ---- Portfolio masonry ------------------------------------------------
      CSS columns rather than a JS masonry library: no runtime, no reflow
      pass, and it degrades to a single column at 375px on its own. */

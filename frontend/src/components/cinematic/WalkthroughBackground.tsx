@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
 import {
+  DRIFT_FRAMES,
   WALKTHROUGH,
   frameIndexAt,
   frameOpacityKeyframes,
@@ -116,9 +117,18 @@ function WalkthroughFrame({
     isCompact ? [1, 1] : [1.04, 1.12],
   );
 
+  // Lateral travel for symmetrical frames, which a centred scale alone leaves
+  // looking static. Off under 768px with the rest of the depth.
+  const drift = DRIFT_FRAMES[index] ?? ["0%", "0%"];
+  const x = useTransform(
+    progress,
+    scaleRange,
+    isCompact ? ["0%", "0%"] : [drift[0], drift[1]],
+  );
+
   return (
     <motion.div
-      style={{ opacity, scale, willChange: "transform, opacity" }}
+      style={{ opacity, scale, x, willChange: "transform, opacity" }}
       className="absolute inset-0"
     >
       {/* eslint-disable-next-line @next/next/no-img-element --
