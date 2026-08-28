@@ -40,7 +40,7 @@ const SERVICE_LINKS = salon.services.slice(0, 5).map((service) => ({
 export function SiteFooter() {
   return (
     <footer className="seam relative isolate overflow-hidden bg-surface">
-      <div className="wrap relative z-10 grid gap-10 pt-16 pb-28 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:pt-20 lg:pb-32">
+      <div className="wrap relative z-10 grid gap-10 pt-16 pb-36 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:pt-20 lg:pb-40">
         {/* Brand */}
         <div className="flex flex-col gap-4">
           <Wordmark className="text-2xl" />
@@ -154,8 +154,21 @@ export function SiteFooter() {
         Only the bottom is cropped: translate-y pushes the lower part of the
         letterforms past the footer's edge, which clips them.
 
+        max-w is load-bearing, not styling. The SVG's height is its width times
+        the viewBox ratio, so an uncapped w-full grew the word with the window:
+        at 3440 it measured 722px tall inside a 595px footer — 121% of it —
+        and reached 498px up into the columns, putting body text on top of the
+        watermark and taking contrast with it. Capped, it stops growing at
+        1376px wide and the columns stay clear of it at any window size.
+
         Decorative, so aria-hidden and select-none — never read, never
         selected, never a tab stop.
+
+        The bottom padding and translate together are what keep it decorative
+        in the accessibility sense too. Measured at 2500px with less of both,
+        the "All services" link sat on the watermark and fell from 4.71:1 to
+        2.65:1 — under AA. No glyph may sit on it; the block may overlap, the
+        text may not.
 
         The apostrophe is normalised here. salon.info.name carries a straight
         ASCII quote (U+0027); <Wordmark> quietly substitutes a curly one at
@@ -169,7 +182,7 @@ export function SiteFooter() {
       >
         <svg
           viewBox="0 0 1000 210"
-          className="w-full translate-y-[26%] fill-current text-fg/[0.24]"
+          className="mx-auto w-full max-w-[86rem] translate-y-[34%] fill-current text-fg/[0.24]"
           role="presentation"
           focusable="false"
         >
