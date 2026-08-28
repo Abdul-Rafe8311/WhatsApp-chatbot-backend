@@ -32,7 +32,7 @@ export function MeetSonia({ id }: { id: string }) {
 
   return (
     <section id={id} className="seam bg-surface">
-      <div className="wrap grid gap-8 py-16 sm:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-16">
+      <div className="reveal wrap grid gap-8 py-16 sm:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-16">
         <SalonImage
           src={salon.info.aboutImage}
           alt={salon.info.aboutImageAlt}

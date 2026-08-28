@@ -46,12 +46,12 @@ export function Hero({ id }: { id: string }) {
           hasImage ? "min-h-[78svh] text-on-image" : ""
         }`}
       >
-        <h1 className="type-hero">{copy.hero.headline}</h1>
+        <h1 className="type-hero rise">{copy.hero.headline}</h1>
 
         {/* Plain type on the headline's own left edge — no pill, no border,
             no checkmark. It reads as a credential precisely because it is not
             boxed. */}
-        <p className={hasImage ? "type-meta" : "type-meta text-label"}>
+        <p className={`rise rise-2 ${hasImage ? "type-meta" : "type-meta text-label"}`}>
           {credentialLine}
         </p>
 
@@ -59,6 +59,7 @@ export function Hero({ id }: { id: string }) {
           prefill={copy.cta.generalPrefill}
           label={copy.cta.label}
           tone={hasImage ? "onImage" : "default"}
+          className="rise rise-3"
         />
       </div>
     </section>

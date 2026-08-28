@@ -117,7 +117,7 @@ export function Portfolio({ id }: { id: string }) {
           </fieldset>
           )}
 
-          <ul className={`pf-grid${few ? " pf-grid--few" : ""}`}>
+          <ul className={`reveal pf-grid${few ? " pf-grid--few" : ""}`}>
             {items.map((item: Item) => (
               <li key={item.id} data-cat={item.category}>
                 {item.image ? (
@@ -126,7 +126,7 @@ export function Portfolio({ id }: { id: string }) {
                     aria-label={copy.portfolio.openLabel(
                       item.imageAlt ?? item.category,
                     )}
-                    className="block transition-opacity duration-200 hover:opacity-90"
+                    className="tile-zoom block overflow-hidden transition-opacity duration-200 hover:opacity-90"
                   >
                     <SalonImage
                       src={item.image}

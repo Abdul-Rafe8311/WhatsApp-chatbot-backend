@@ -79,7 +79,7 @@ export default function ServicesPage() {
             const note = copy.services.groupNotes[category];
 
             return (
-              <div key={category} className="flex flex-col gap-2">
+              <div key={category} className="reveal flex flex-col gap-2">
                 <div className="flex flex-col gap-0.5 pb-1">
                   <h2 className="type-meta text-label">{category}</h2>
                   {note && <p className="type-meta text-fg/65">{note}</p>}

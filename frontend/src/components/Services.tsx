@@ -23,7 +23,7 @@ function BridalCard({ service }: { service: Service }) {
         src={service.image}
         alt={service.imageAlt}
         ratio="4:5"
-        className="transition-opacity duration-200 group-hover:opacity-90"
+        className="tile-zoom overflow-hidden transition-opacity duration-200 group-hover:opacity-90"
         sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
       />
 
@@ -97,7 +97,7 @@ export function Services({ id }: { id: string }) {
             {note && <p className="type-meta text-fg/65">{note}</p>}
           </div>
 
-          <ul className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="reveal grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             {bridalDays.map((service) => (
               <BridalCard key={service.id} service={service} />
             ))}

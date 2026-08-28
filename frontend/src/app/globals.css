@@ -28,6 +28,14 @@
      would resolve to paper and fail contrast. */
   --color-scrim-ink: #170e11;
 
+  /* Motion. One easing curve and three durations for the whole site, so
+     nothing moves in a way that reads as a different hand. The curve is a
+     soft decelerate — things arrive and settle rather than bouncing. */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 200ms;
+  --motion-base: 520ms;
+  --motion-slow: 760ms;
+
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
 }
@@ -253,6 +261,94 @@
   }
 }
 
+
+/* ---------------------------------------------------------------------------
+   Motion
+
+   Two rules govern everything here.
+
+   Nothing that hides content may run unless it is certain to finish. Every
+   opacity:0 starting state is nested inside BOTH a prefers-reduced-motion
+   guard and an @supports check, so a browser that cannot run the animation,
+   or a visitor who has asked for less motion, never gets the rule at all and
+   simply sees the content. A bare opacity:0 with a JS-free reveal is the
+   classic way to ship an invisible page.
+
+   And it stays quiet. This design spends its boldness on one element; motion
+   is not that element. Distances are small, nothing bounces, nothing loops,
+   and nothing moves that the visitor did not cause or scroll to.
+--------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ---- On-load entrance, hero only -----------------------------------
+     The one arrival moment on the page. Runs on the document timeline, so
+     it needs no scroll support and works everywhere. */
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .rise {
+    animation: rise-in var(--motion-slow) var(--ease-soft) both;
+  }
+  .rise-2 { animation-delay: 90ms; }
+  .rise-3 { animation-delay: 180ms; }
+
+  /* ---- Scroll reveal ---------------------------------------------------
+     Scroll-driven CSS, no JavaScript and no IntersectionObserver. Where
+     animation-timeline is unsupported the @supports block is skipped
+     entirely and the content is simply visible — which is why the opacity:0
+     lives inside the block rather than outside it. */
+  @supports (animation-timeline: view()) {
+    /* TRANSFORM ONLY — no opacity, deliberately.
+
+       A scroll-driven animation with fill:both applies its from-state while
+       the element is still short of the range, so an opacity:0 here leaves
+       the element invisible until the timeline advances. If that timeline
+       ever fails to tick — an engine quirk, a scroll container that is not
+       the scrollport, a browser that reports support it does not honour —
+       whole sections go blank with nothing in the console to explain it.
+       Measured here: every .reveal sat at opacity 0 under test.
+
+       Animating only transform makes the failure mode harmless. Worst case a
+       section rests 18px lower than intended, which nobody will notice. A
+       fade is not worth betting four sections of a client demo on. */
+    @keyframes reveal-in {
+      from { transform: translateY(18px); }
+      to   { transform: none; }
+    }
+
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      /* Finishes well before the element is centred, so it is settled by the
+         time it is actually being read. */
+      animation-range: entry 8% cover 26%;
+    }
+  }
+
+  /* ---- Portfolio tiles -------------------------------------------------
+     A slow, small zoom under the existing opacity shift. Only on tiles that
+     are links — an empty placeholder has nothing to reveal. */
+  .tile-zoom img {
+    transition: transform var(--motion-slow) var(--ease-soft);
+  }
+  .group:hover .tile-zoom img,
+  a:hover > .tile-zoom img {
+    transform: scale(1.04);
+  }
+
+  /* ---- Lightbox --------------------------------------------------------
+     The :target lightbox appears instantly otherwise, which is jarring at
+     full screen. */
+  @keyframes lb-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .lb:target {
+    animation: lb-in var(--motion-fast) var(--ease-soft) both;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
