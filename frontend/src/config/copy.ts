@@ -25,6 +25,10 @@ export const copy = {
     services: "Services",
     about: "About",
     hours: "Hours & Location",
+    /** Mobile menu. The button's accessible name says what it will do. */
+    menuLabel: "Main menu",
+    menuOpen: "Menu",
+    menuClose: "Close menu",
   },
 
   cta: {

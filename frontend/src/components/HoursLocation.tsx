@@ -30,8 +30,8 @@ export function HoursLocation({ id }: { id: string }) {
   const mapsUrl = copy.location.mapsUrl(salon.info.address);
 
   return (
-    <section id={id} className="seam bg-surface">
-      <div className="reveal wrap grid gap-8 pt-16 sm:pt-20 lg:grid-cols-[5fr_7fr] lg:gap-16">
+    <section id={id} className="bg-surface">
+      <div className="reveal wrap grid gap-10 pt-24 sm:pt-32 lg:pt-40 lg:grid-cols-[4fr_8fr] lg:gap-24">
         <h2 className="type-h2">{copy.hours.heading}</h2>
 
         <div className="flex flex-col gap-8">
@@ -86,7 +86,7 @@ export function HoursLocation({ id }: { id: string }) {
 
       {/* Storefront or map. The only landscape image on the page, which is
           what lets it close the section. */}
-      <div className="wrap pt-12 pb-16 sm:pb-24">
+      <div className="wrap pt-16 pb-24 sm:pb-32 lg:pb-40">
         <SalonImage
           src={salon.info.locationImage}
           alt={salon.info.locationImageAlt}

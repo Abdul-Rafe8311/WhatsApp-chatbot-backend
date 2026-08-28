@@ -42,6 +42,16 @@ export const salon = {
     address: "108 Stadium Road, Sargodha, Punjab 40100", // TODO: street from a directory listing, postcode CONFIRMED
     email: "soniasmakeupsalon@yahoo.com",      // CONFIRMED
 
+    /**
+     * TODO: set on first deploy (Cloudflare Pages gives a *.pages.dev URL).
+     *
+     * Share previews need ABSOLUTE image URLs, so until this is set the
+     * og:image is omitted rather than emitted as a relative path that no
+     * chat client can resolve. Pasting the link into WhatsApp will show a
+     * bare URL with no card until it is filled in.
+     */
+    siteUrl: null as string | null,
+
     // TODO: client to approve copy.
     about:
       "Sonia's Makeup Salon is a bridal salon in Sargodha. Sonia Shabbir " +

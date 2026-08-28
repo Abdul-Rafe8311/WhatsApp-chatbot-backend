@@ -63,7 +63,7 @@ export function Portfolio({ id }: { id: string }) {
 
   return (
     <section id={id} className="seam bg-surface">
-      <div className="wrap flex flex-col gap-8 py-16 sm:py-24">
+      <div className="wrap flex flex-col gap-10 section-y-lg">
         <div className="flex flex-col gap-2">
           <h2 className="type-h2">{copy.portfolio.heading}</h2>
           <p className="type-body text-fg/70">{copy.portfolio.intro}</p>

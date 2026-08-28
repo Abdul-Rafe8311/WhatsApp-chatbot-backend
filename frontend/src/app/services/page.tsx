@@ -65,7 +65,7 @@ export default function ServicesPage() {
   return (
     <main className="flex flex-1 flex-col">
       <section className="bg-surface">
-        <div className="wrap flex flex-col gap-14 py-16 sm:py-24">
+        <div className="wrap flex flex-col gap-16 section-y">
           <div className="flex flex-col gap-3">
             <h1 className="type-h2">{copy.services.pageHeading}</h1>
             <p className="type-body text-fg/70">{copy.services.pageIntro}</p>

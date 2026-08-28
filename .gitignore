@@ -34,3 +34,7 @@ data/
 .DS_Store
 .idea/
 .vscode/
+
+# Claude Code local skills and settings — personal tooling, not project code.
+# The vendored skills live in ~/.claude/skills/ so they work in every project.
+.claude/

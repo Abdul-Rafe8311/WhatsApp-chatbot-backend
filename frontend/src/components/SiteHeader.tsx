@@ -1,33 +1,53 @@
+import { MobileNav } from "@/components/MobileNav";
 import { Seal } from "@/components/Seal";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Wordmark } from "@/components/Wordmark";
 import { NAV_ITEMS } from "@/lib/sections";
 
+/**
+ * Sticky, translucent, and it keeps the nav reachable at every width.
+ *
+ * Sticky because the page is long now and the WhatsApp CTA is the only other
+ * persistent thing on screen; a header that scrolls away leaves a visitor
+ * halfway down with no way back. Translucent with a blur so the hero
+ * photograph reads through it rather than being cut off by a solid bar.
+ *
+ * The hairline is gold at low opacity rather than full strength: a solid gold
+ * rule across the top of a photograph reads as a border round a document.
+ *
+ * --header-h is published as a custom property so the mobile panel can sit
+ * exactly beneath the bar without either of them hardcoding the other's
+ * height.
+ */
 export function SiteHeader() {
   return (
-    <header className="bg-surface border-b border-gold">
-      <div className="wrap flex items-center justify-between gap-4 py-4">
+    <header
+      style={{ ["--header-h" as string]: "4rem" }}
+      className="sticky top-0 z-50 border-b border-gold/25 bg-surface/85 backdrop-blur-md"
+    >
+      <div className="wrap flex h-16 items-center justify-between gap-4">
         <a
           href="#top"
-          className="flex items-center gap-2 min-h-[44px] -my-2 py-2"
+          className="flex items-center gap-2.5 py-2 transition-opacity duration-200 hover:opacity-80"
         >
           <Seal className="text-2xl" />
-          <Wordmark className="text-xl" />
+          <Wordmark className="text-2xl" />
         </a>
 
-        <div className="flex items-center gap-6">
-          {/* Derived from the section registry, so a link can only exist for a
-              section that actually renders. Anchors appear as stages land.
-              Desktop-only: on a phone the page is one short scroll and the
-              sticky CTA is what matters in the thumb zone. */}
+        {/* Desktop. Held back to md so four links plus the wordmark and the
+            toggle are never crowded — at sm they fit only just. */}
+        <div className="hidden items-center gap-8 md:flex">
           {NAV_ITEMS.length > 0 && (
-            <nav className="hidden sm:block">
-              <ul className="flex items-center gap-7">
+            <nav>
+              <ul className="flex items-center gap-8">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.href}>
                     <a
                       href={item.href}
-                      className="type-meta text-fg/70 hover:text-fg transition-colors duration-200"
+                      className="type-meta relative inline-flex min-h-[44px] items-center text-fg/70 transition-colors duration-200 hover:text-fg
+                        after:absolute after:bottom-2.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0
+                        after:bg-gold after:transition-transform after:duration-300 after:ease-out
+                        hover:after:origin-left hover:after:scale-x-100"
                     >
                       {item.label}
                     </a>
@@ -36,11 +56,11 @@ export function SiteHeader() {
               </ul>
             </nav>
           )}
-
-          {/* Stays visible at 375px, where the nav does not — one short word
-              beside the wordmark rather than a second row. */}
           <ThemeToggle />
         </div>
+
+        {/* Mobile: the same links, in a panel. */}
+        <MobileNav items={NAV_ITEMS} />
       </div>
     </header>
   );

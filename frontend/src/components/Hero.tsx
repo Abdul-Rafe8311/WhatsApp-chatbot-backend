@@ -42,8 +42,8 @@ export function Hero({ id }: { id: string }) {
       )}
 
       <div
-        className={`wrap relative flex flex-col items-start justify-end gap-6 py-16 sm:py-24 ${
-          hasImage ? "min-h-[78svh] text-on-image" : ""
+        className={`wrap relative flex flex-col items-start justify-end gap-7 py-20 sm:py-28 lg:py-32 ${
+          hasImage ? "min-h-[90svh] text-on-image" : ""
         }`}
       >
         <h1 className="type-hero rise">{copy.hero.headline}</h1>
