@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { ANCHOR_BEATS, STAGE_HEIGHT_CLASS, STAGE_RANGE_VAR, at, beat } from "@/lib/stage";
+import { STAGE_HEIGHT_CLASS, beat } from "@/lib/stage";
 import { useIsCompact, usePrefersReducedMotion } from "@/lib/viewport";
 import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
+import { AnchorScroll, STAGE_JUMP_EVENT } from "@/components/cinematic/AnchorScroll";
 import { Arrival } from "@/components/cinematic/Arrival";
 import { ServicesBeat } from "@/components/cinematic/ServicesBeat";
 import { GalleryBeat } from "@/components/cinematic/GalleryBeat";
@@ -68,6 +69,47 @@ export function CinematicLanding({
   // The stage dims through the final beat and hands over to the footer.
   const stageOpacity = useTransform(smoothed, [beat("contact").range[0], 0.97], [1, 0]);
 
+  // While an anchor jump is scrolling, pin the smoothing spring to the real
+  // progress every frame. Left to itself the spring eases across half the page
+  // over about three seconds, so the beat you clicked would fade up long after
+  // you arrived — or the wrong one would still be showing.
+  //
+  // Runs until the scroll position holds still for three frames, so it covers
+  // both an instant jump and a long smooth one without knowing which it is,
+  // and without depending on scrollend. The 3s ceiling is a backstop against a
+  // scroll that never settles.
+  useEffect(() => {
+    let raf = 0;
+    let still = 0;
+    let last = -1;
+    let deadline = 0;
+
+    function frame() {
+      smoothed.jump(scrollYProgress.get());
+      const y = window.scrollY;
+      still = y === last ? still + 1 : 0;
+      last = y;
+      if (still < 3 && performance.now() < deadline) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        raf = 0;
+      }
+    }
+
+    function onJump() {
+      still = 0;
+      last = -1;
+      deadline = performance.now() + 3000;
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+
+    window.addEventListener(STAGE_JUMP_EVENT, onJump);
+    return () => {
+      window.removeEventListener(STAGE_JUMP_EVENT, onJump);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [smoothed, scrollYProgress]);
+
   if (reducedMotion) {
     // `contact` is deliberately not rendered here. The stacked fallback is the
     // full section list and already includes the hours section, so adding it
@@ -77,30 +119,11 @@ export function CinematicLanding({
 
   return (
     <>
+      {/* Hash links cannot land on a beat by themselves; this computes where
+          to scroll from the same at() mapping the reveals use. */}
+      <AnchorScroll containerRef={containerRef} />
+
       <div ref={containerRef} className={`relative ${STAGE_HEIGHT_CLASS}`}>
-        {/*
-          Anchor targets for the nav.
-
-          A beat is not an element with an id — it is a range of scroll — so a
-          plain #id link had nothing to jump to and did nothing at all. These
-          are zero-height markers parked at the scroll offset that puts their
-          beat on screen, so a native anchor jump lands mid-beat and the
-          browser's own smooth scrolling does the work. No JS, no scroll
-          hijacking, and it still works with the page's back/forward history.
-
-          Offset is against the scrollable range, not the container height:
-          the sticky stage eats the last viewport, so using the full height
-          would overshoot every target.
-        */}
-        {Object.entries(ANCHOR_BEATS).map(([id, beatId]) => (
-          <div
-            key={id}
-            id={id}
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 h-px w-px"
-            style={{ top: `calc(${STAGE_RANGE_VAR} * ${at(beat(beatId), 0.4)})` }}
-          />
-        ))}
         <div className="sticky top-0 h-dvh overflow-hidden">
           <motion.div
             style={{ opacity: stageOpacity }}

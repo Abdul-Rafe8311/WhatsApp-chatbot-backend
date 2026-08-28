@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SalonLogo } from "@/components/SalonLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NAV_ITEMS } from "@/lib/sections";
@@ -14,12 +15,12 @@ export function SiteHeader() {
             The logo carries the accessible name via its alt text, so the link
             needs no label of its own. The typeset <Wordmark> still holds the
             name in the footer, where there is room to read it. */}
-        <a
+        <Link
           href="/"
           className="flex items-center min-h-[44px] -my-2 py-2"
         >
           <SalonLogo />
-        </a>
+        </Link>
 
         <div className="flex items-center gap-6">
           {/* Derived from the section registry, so a link can only exist for a
