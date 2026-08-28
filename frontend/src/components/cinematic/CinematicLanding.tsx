@@ -2,13 +2,13 @@
 
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { STAGE_HEIGHT_CLASS } from "@/lib/stage";
+import { STAGE_HEIGHT_CLASS, beat } from "@/lib/stage";
 import { useIsCompact, usePrefersReducedMotion } from "@/lib/viewport";
-import { ScrollDebug } from "@/components/cinematic/ScrollDebug";
 import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
 import { Arrival } from "@/components/cinematic/Arrival";
 import { ServicesBeat } from "@/components/cinematic/ServicesBeat";
 import { GalleryBeat } from "@/components/cinematic/GalleryBeat";
+import { MeetSoniaBeat } from "@/components/cinematic/MeetSoniaBeat";
 import { BookingBeat } from "@/components/cinematic/BookingBeat";
 
 /**
@@ -66,7 +66,7 @@ export function CinematicLanding({
     isCompact ? ["0%", "0%"] : ["0%", "-6%"],
   );
   // The stage dims through the final beat and hands over to the footer.
-  const stageOpacity = useTransform(smoothed, [0.75, 0.97], [1, 0]);
+  const stageOpacity = useTransform(smoothed, [beat("contact").range[0], 0.97], [1, 0]);
 
   if (reducedMotion) {
     return (
@@ -100,19 +100,13 @@ export function CinematicLanding({
             <Arrival progress={smoothed} />
             <ServicesBeat progress={smoothed} />
             <GalleryBeat progress={smoothed} />
+            <MeetSoniaBeat progress={smoothed} />
             <BookingBeat progress={smoothed} />
           </motion.div>
         </div>
       </div>
 
       {contact}
-
-      <ScrollDebug
-        progress={scrollYProgress}
-        smoothed={smoothed}
-        isCompact={isCompact}
-        reducedMotion={reducedMotion}
-      />
     </>
   );
 }

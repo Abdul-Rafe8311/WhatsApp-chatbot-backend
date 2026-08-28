@@ -50,12 +50,16 @@ export const copy = {
     /** The standalone /services page, which carries the full menu. */
     pageHeading: "Services",
     pageIntro:
-      "The full menu. Prices below are a guide — bridal work is quoted per booking, since it depends on the look, the day, and how many people are being done. Message us for an exact quote.",
+      "The full menu. Bridal work is quoted per booking, since it depends on the look, the day, and how many people are being done. Message us to confirm your date.",
     pageOutro:
       "Not sure which you need? Message us and we will talk it through.",
     seeAllLabel: "See all services",
-    /** Shown wherever prices appear, because every figure is an estimate. */
-    priceGuideNote: "Guide prices — confirmed on WhatsApp",
+    /**
+     * Shown wherever prices appear. They are the salon's own rates now, so
+     * this no longer calls them guides — but bridal is still quoted per
+     * booking, which is what the visitor needs to know before messaging.
+     */
+    priceGuideNote: "Bridal is quoted per booking — message us to confirm",
     /**
      * Only Bridal carries a note, and only because its order is real
      * information: the four wedding days run in that sequence. Engagement
@@ -80,11 +84,17 @@ export const copy = {
   hours: {
     heading: "Hours & Location",
     /**
+     * Used while hours.verified is false. The section shows no schedule then,
+     * so promising "Hours" in the heading is a heading writing a cheque the
+     * section cannot cash.
+     */
+    headingUnverified: "Find us",
+    /**
      * hours.verified is false, so no schedule renders. Written as an
      * invitation rather than an apology: messaging genuinely is how you get
      * a straight answer about a specific day, which is the whole product.
      */
-    unverifiedLead: "Call to confirm timings",
+    unverifiedLead: "Message us to confirm timings",
     unverifiedNote:
       "Timings shift through wedding season, and bridal bookings are taken by appointment. Message us and we will tell you exactly when we are free.",
     /** Only reachable once hours.verified flips to true. */
@@ -197,6 +207,12 @@ export const copy = {
   footer: {
     instagram: "Instagram",
     facebook: "Facebook",
+    /** Column headings. Link destinations all exist; none are invented. */
+    exploreHeading: "Explore",
+    servicesHeading: "Services",
+    contactHeading: "Contact",
+    seeAllServices: "All services",
+    emailLabel: "Email",
     /** Shown only while the WhatsApp number is unset. Auto-hides once it is. */
     demoNotice: "Demo build — WhatsApp number not yet connected",
   },

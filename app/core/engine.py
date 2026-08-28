@@ -15,6 +15,7 @@ from threading import Lock
 from typing import Any
 
 from app import config
+from app.adapters import catalogue
 from app.adapters import llm
 from app.core import bookings
 
@@ -144,7 +145,8 @@ def _clean_slots(proposed: dict[str, str], current: dict[str, str]) -> dict[str,
         if not value:
             continue
         if key == "service":
-            matched = config.find_service(value)
+            matched_service = catalogue.find_service(value)
+            matched = matched_service.name if matched_service else None
             if not matched:
                 log.info("Rejecting unrecognised service slot %r", value)
                 continue

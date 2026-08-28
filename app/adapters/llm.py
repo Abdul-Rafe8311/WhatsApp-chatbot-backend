@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from typing import Any, Literal
 
 from app import config
+from app.adapters import catalogue
 
 log = logging.getLogger(__name__)
 
@@ -102,7 +103,7 @@ def build_system_prompt(known_slots: dict[str, str]) -> str:
     )
     return SYSTEM_PROMPT_TEMPLATE.format(
         salon=config.SALON_NAME,
-        kb=config.KNOWLEDGE_BASE,
+        kb=catalogue.knowledge_base(),
         slots=json.dumps(public) if public else "none",
         awaiting_line=awaiting_line,
     )
@@ -237,60 +238,58 @@ def _clean_name(text: str) -> str:
 
 
 def _info_answer(text: str, urdu: bool) -> str | None:
-    """Answer a knowledge-base question, or None if it is not one."""
-    named = config.find_service(text)
+    """Answer a knowledge-base question, or None if it is not one.
+
+    Every fact here comes from the published contract. Where the contract says
+    a thing is unconfirmed — the opening hours today — this says so rather than
+    filling the gap. The old version answered hours, parking, payment methods
+    and a phone number from hardcoded strings that described a different salon
+    in a different city.
+    """
+    svc = catalogue.find_service(text)
+
     if _has(text, _PRICE_WORDS):
-        svc = config.service_by_name(named or "")
         if svc:
+            return catalogue.price_phrase(svc, urdu)
+        # "How much is bridal?" names a category, not a service: list the days
+        # rather than pick one of them arbitrarily.
+        if _has(text, catalogue.BRIDAL_WORDS):
+            days = ", ".join(catalogue.bridal_service_names())
             return (
-                f"{svc.name} ki price PKR {svc.price_pkr:,} hai, tuqreeban {svc.duration_min} minute lagte hain."
+                f"Bridal ke liye alag alag din hain: {days}. Kis din ka rate chahiye?"
                 if urdu
-                else f"{svc.name} is PKR {svc.price_pkr:,} and takes about {svc.duration_min} minutes."
+                else f"Bridal is booked per day: {days}. Which one did you mean?"
             )
-        sample = ", ".join(f"{s.name} PKR {s.price_pkr:,}" for s in config.SERVICES[:4])
-        return (
-            f"Rates: {sample}. Kis service ka rate chahiye?"
-            if urdu
-            else f"Our rates: {sample}. Which service did you mean?"
-        )
+        return catalogue.price_list_phrase(urdu)
+
     if _has(text, _TIME_WORDS):
-        return (
-            "Hum Monday se Saturday 11:00 AM se 9:00 PM tak khule hain. Sunday band."
-            if urdu
-            else config.SALON_HOURS
-        )
+        return catalogue.hours_phrase(urdu)
+
     if _has(text, _PLACE_WORDS):
+        return catalogue.address_phrase(urdu)
+
+    # Parking, payment terms and a phone number are not in the contract, so the
+    # agent does not have them. Saying so is the correct answer; the previous
+    # hardcoded replies described a Lahore basement car park.
+    if _has(text, _PARK_WORDS) or _has(text, _PAY_WORDS):
         return (
-            f"Hamara pata: {config.SALON_ADDRESS}."
+            "Is ke bare me mujhe confirm maloomat nahi hain. Main pata kar ke bata sakti hun."
             if urdu
-            else f"We are at {config.SALON_ADDRESS}."
+            else "I do not have confirmed information on that. I can find out for you."
         )
-    if _has(text, _PARK_WORDS):
-        return (
-            "Ji haan, customers ke liye free basement parking available hai."
-            if urdu
-            else config.SALON_PARKING
-        )
-    if _has(text, _PAY_WORDS):
-        return (
-            "Aap cash, card, ya JazzCash/Easypaisa se pay kar sakti hain."
-            if urdu
-            else config.SALON_PAYMENT
-        )
+
     if _has(text, _SERVICE_LIST_WORDS):
-        names = ", ".join(config.service_names()[:6])
+        names = ", ".join(catalogue.service_names(6))
         return (
             f"Hum {names} waghera karte hain. Kis ka rate chahiye?"
             if urdu
             else f"We offer {names} and more. Which one interests you?"
         )
-    if named:
-        svc = config.service_by_name(named)
-        assert svc is not None
+
+    if svc:
+        price = catalogue.price_phrase(svc, urdu)
         return (
-            f"{svc.name} PKR {svc.price_pkr:,} ka hai, {svc.duration_min} minute lagte hain. Book karun?"
-            if urdu
-            else f"{svc.name} is PKR {svc.price_pkr:,}, about {svc.duration_min} minutes. Shall I book it?"
+            f"{price} Book karun?" if urdu else f"{price} Shall I book it?"
         )
     return None
 
@@ -309,9 +308,9 @@ async def _mock_complete(history: list[dict[str, str]], known_slots: dict[str, s
 
     if _has(text, _CANCEL_WORDS) and not awaiting:
         reply = (
-            f"Cancel ya reschedule ke liye {config.SALON_PHONE} par call kar lijiye."
+            f"Cancel ya reschedule ke liye yahin message kar dijiye."
             if urdu
-            else f"For cancellations please call us at {config.SALON_PHONE}."
+            else "For cancellations or changes, just message us here."
         )
         return LLMResult(reply=reply, intent="cancel", slots=slots)
 
@@ -329,11 +328,11 @@ async def _mock_complete(history: list[dict[str, str]], known_slots: dict[str, s
                 )
         else:
             if awaiting == "service":
-                matched = config.find_service(text)
+                matched = catalogue.find_service(text)
                 if matched:
-                    slots["service"] = matched
+                    slots["service"] = matched.name
                 else:
-                    names = ", ".join(config.service_names()[:6])
+                    names = ", ".join(catalogue.service_names(6))
                     return LLMResult(
                         reply=(
                             f"Ye service samajh nahi aayi. Hum ye karte hain: {names}. Kaunsi chahiye?"
@@ -360,24 +359,18 @@ async def _mock_complete(history: list[dict[str, str]], known_slots: dict[str, s
 
     wants_booking = _has(text, _BOOKING_WORDS)
     if wants_booking or booking_mode:
-        named = config.find_service(text)
+        named = catalogue.find_service(text)
         # "I want to book" is intent only — a service name is filled only when one is
         # actually mentioned in the message.
         if named and not slots.get("service"):
-            slots["service"] = named
+            slots["service"] = named.name
         missing = _next_missing(slots)
         if missing:
             prefix = ""
             if wants_booking and not slots:
                 prefix = "Zaroor!" if urdu else "Of course!"
             elif named and missing != "service":
-                svc = config.service_by_name(named)
-                if svc:
-                    prefix = (
-                        f"{svc.name} PKR {svc.price_pkr:,}."
-                        if not urdu
-                        else f"{svc.name} PKR {svc.price_pkr:,} ka hai."
-                    )
+                prefix = catalogue.price_phrase(named, urdu)
             return LLMResult(reply=_ask(missing, urdu, prefix), intent="booking", slots=slots)
         reply = (
             f"Shukriya {slots['customer_name']}! Booking confirm hai."

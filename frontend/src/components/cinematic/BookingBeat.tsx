@@ -4,10 +4,10 @@ import { motion, useTransform, type MotionValue } from "framer-motion";
 import { OPEN_CHAT_EVENT } from "@/components/ChatWidget";
 import { WhatsAppCTA } from "@/components/WhatsAppCTA";
 import { copy } from "@/config/copy";
-import { BEATS } from "@/lib/stage";
+import { at, beat } from "@/lib/stage";
 import { whatsappReady } from "@/lib/whatsapp";
 
-const BOOKING_BEAT = BEATS[3];
+const BOOKING_BEAT = beat("booking");
 
 /**
  * Beat 4 — the room goes dark and the ask arrives.
@@ -34,19 +34,19 @@ export function BookingBeat({ progress }: { progress: MotionValue<number> }) {
   // any weight left on screen.
   const dimOpacity = useTransform(
     progress,
-    [start - 0.02, start + 0.05, end - 0.02, end],
+    [start - 0.015, at(BOOKING_BEAT, 0.22), at(BOOKING_BEAT, 0.9), end],
     [0, 0.72, 0.72, 0.5],
   );
 
   const contentOpacity = useTransform(
     progress,
-    [start, start + 0.045, end - 0.04, end - 0.01],
+    [start, at(BOOKING_BEAT, 0.22), at(BOOKING_BEAT, 0.82), at(BOOKING_BEAT, 0.95)],
     [0, 1, 1, 0],
   );
   // Scales in, never out: shrinking on exit reads as the offer being withdrawn.
   const contentScale = useTransform(
     progress,
-    [start, start + 0.06],
+    [start, at(BOOKING_BEAT, 0.3)],
     [0.92, 1],
   );
 

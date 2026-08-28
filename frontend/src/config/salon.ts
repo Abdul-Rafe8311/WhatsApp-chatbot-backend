@@ -17,18 +17,19 @@
 export const PRICE_ON_REQUEST = "On request" as const;
 
 /**
- * PRICES ARE INDICATIVE MARKET ESTIMATES, NOT THE CLIENT'S RATES.
+ * PRICES ARE THE SALON'S OWN RATES.
  *
- * Every service carries priceEstimated: true. These figures are typical
- * Pakistani rates for a premium regional bridal salon, added so the demo
- * does not read as an empty price list in front of the owner. The client
- * has not quoted any of them.
+ * These began as indicative market estimates. Sonia has since confirmed them,
+ * so every service carries priceEstimated: false and both the site and the
+ * booking agent state them as firm figures rather than guides.
  *
- * Two things follow. The site labels them as guide prices rather than
- * presenting them as fact, and /api/services.json carries the same flag so
- * the booking agent quotes them as approximate and offers to confirm.
+ * priceNote (PRICE_ON_REQUEST) still applies to any service whose priceMin is
+ * null. A null has not changed meaning: it is UNKNOWN, never zero and never
+ * free, and neither surface may substitute a figure for one.
  *
- * Replace with real rates and set priceEstimated: false per service.
+ * If a rate is ever revised but not yet confirmed, set priceEstimated back to
+ * true for that service alone — /api/services.json carries the flag per
+ * service, so the agent softens only that quote.
  */
 export const PRICE_CURRENCY = "PKR" as const;
 
@@ -38,7 +39,7 @@ export const salon = {
     owner: "Sonia Shabbir",                    // CONFIRMED (IG display name)
     tagline: "Bridal makeup, balayage expert, skin services", // CONFIRMED (their own FB description)
     city: "Sargodha",                          // CONFIRMED
-    address: "108 Stadium Road, Sargodha, Punjab 40100", // TODO: street from a directory listing, postcode CONFIRMED
+    address: "108 Stadium Road, Sargodha, Punjab 40100", // CONFIRMED by the client
     email: "soniasmakeupsalon@yahoo.com",      // CONFIRMED
 
     // TODO: client to approve copy.
@@ -102,7 +103,7 @@ export const salon = {
       description: "Colourful mehndi-day makeup with floral jewellery styling.",
       priceMin: 15000,
       priceMax: 25000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,                   // TODO: ask client
       image: "/images/portfolio/mehndi.webp" as string | null,
@@ -117,7 +118,7 @@ export const salon = {
       description: "Understated bridal makeup and hair for the nikah ceremony.",
       priceMin: 18000,
       priceMax: 30000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: "/images/portfolio/bridal-04.webp" as string | null,
@@ -132,7 +133,7 @@ export const salon = {
       description: "Full bridal makeup, hair styling and dupatta setting for the barat.",
       priceMin: 30000,
       priceMax: 55000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: "/images/portfolio/barat.webp" as string | null,
@@ -147,7 +148,7 @@ export const salon = {
       description: "Softer, camera-ready bridal look with hair styling for the walima.",
       priceMin: 25000,
       priceMax: 45000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: "/images/portfolio/walima.webp" as string | null,
@@ -162,7 +163,7 @@ export const salon = {
       description: "Makeup and hair for the engagement.",
       priceMin: 12000,
       priceMax: 20000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -178,7 +179,7 @@ export const salon = {
       description: "Event makeup for guests, family and formal occasions.",
       priceMin: 5000,
       priceMax: 10000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -194,7 +195,7 @@ export const salon = {
       description: "Hand-painted colour that grows out softly, matched to your skin tone.",
       priceMin: 10000,
       priceMax: 20000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -208,7 +209,7 @@ export const salon = {
       description: "Foil highlights and lowlights.",
       priceMin: 7000,
       priceMax: 15000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -222,7 +223,7 @@ export const salon = {
       description: "Cut, blow-dry and styling.",
       priceMin: 1500,
       priceMax: 3500,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -236,7 +237,7 @@ export const salon = {
       description: "Keratin, protein and repair treatments.", // TODO: confirm which they offer
       priceMin: 4000,
       priceMax: 9000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -252,7 +253,7 @@ export const salon = {
       description: "Cleansing and brightening facials.", // TODO: confirm the range they offer
       priceMin: 2500,
       priceMax: 6000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -266,7 +267,7 @@ export const salon = {
       description: "Eyebrow shaping and face threading.",
       priceMin: 300,
       priceMax: 600,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -280,7 +281,7 @@ export const salon = {
       description: "Full-body and partial waxing.",
       priceMin: 2500,
       priceMax: 5000,
-      priceEstimated: true,
+      priceEstimated: false,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,

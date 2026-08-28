@@ -3,9 +3,9 @@
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
-import { BEATS, type Beat } from "@/lib/stage";
+import { at, beat } from "@/lib/stage";
 
-const ARRIVAL: Beat = BEATS[0];
+const ARRIVAL = beat("arrival");
 
 /**
  * Beat 1 — the salon name over the opening frame of the walkthrough.
@@ -35,7 +35,7 @@ export function Arrival({ progress }: { progress: MotionValue<number> }) {
   // animation on the inner element instead, which plays on load.
   const textOpacity = useTransform(
     progress,
-    [start, end - 0.055, end - 0.02],
+    [start, at(ARRIVAL, 0.6), at(ARRIVAL, 0.85)],
     [1, 1, 0],
   );
   const textY = useTransform(progress, [start, end], ["0px", "-40px"]);
@@ -45,7 +45,7 @@ export function Arrival({ progress }: { progress: MotionValue<number> }) {
 
   // The cue is the first thing to go — once someone is scrolling it has done
   // its job and would only be clutter.
-  const cueOpacity = useTransform(progress, [start, start + 0.03], [1, 0]);
+  const cueOpacity = useTransform(progress, [start, at(ARRIVAL, 0.25)], [1, 0]);
 
   return (
     <>

@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
-import { BEATS } from "@/lib/stage";
+import { at, beat } from "@/lib/stage";
 
-const GALLERY_BEAT = BEATS[2];
+const GALLERY_BEAT = beat("gallery");
 
 /**
  * The filmstrip: Sonia's bridal photographs travelling on X as the page
@@ -37,8 +37,8 @@ const RATIO_CLASS: Record<string, string> = {
 };
 
 /** Travel occupies the middle of the beat, leaving room to arrive and clear. */
-const TRAVEL_FROM = 0.375;
-const TRAVEL_TO = 0.525;
+const TRAVEL_FROM = at(GALLERY_BEAT, 0.15);
+const TRAVEL_TO = at(GALLERY_BEAT, 0.9);
 
 export function GalleryBeat({ progress }: { progress: MotionValue<number> }) {
   const [start, end] = GALLERY_BEAT.range;
@@ -74,17 +74,17 @@ export function GalleryBeat({ progress }: { progress: MotionValue<number> }) {
 
   const scrimOpacity = useTransform(
     progress,
-    [start - 0.02, start + 0.02, end - 0.03, end],
+    [start - 0.015, at(GALLERY_BEAT, 0.08), at(GALLERY_BEAT, 0.92), end],
     [0, 1, 1, 0],
   );
   const contentOpacity = useTransform(
     progress,
-    [start - 0.005, start + 0.03, end - 0.035, end - 0.005],
+    [start - 0.005, at(GALLERY_BEAT, 0.14), at(GALLERY_BEAT, 0.88), at(GALLERY_BEAT, 0.98)],
     [0, 1, 1, 0],
   );
   const headingY = useTransform(
     progress,
-    [start - 0.005, start + 0.03],
+    [start - 0.005, at(GALLERY_BEAT, 0.14)],
     ["18px", "0px"],
   );
 

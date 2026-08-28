@@ -30,8 +30,10 @@ const payload = {
   contract: {
     version: 1,
     status: "temporary",
-    pricesAreEstimates: true,
-    note: "PRICES ARE INDICATIVE MARKET ESTIMATES, not rates quoted by the salon — every service has priceEstimated true. Quote them as approximate and offer to confirm. Generated from the website's local config. This is a stopgap until the shared database lands, at which point both the site and the agent should read from that instead. Shape may change; check contract.version.",
+    // Derived, never asserted: if any service is ever set back to
+    // priceEstimated true this flips on its own and the agent softens.
+    pricesAreEstimates: salon.services.some((s) => s.priceEstimated),
+    note: "Prices are the salon's own confirmed rates and may be quoted as firm figures. Check priceEstimated per service: if one is true, that price is an estimate and must be quoted as approximate with an offer to confirm. A null priceMin means UNKNOWN — never quote a number and never imply the service is free. hours.verified false means the schedule is unconfirmed; do not state opening times while it is false. Generated from the website's local config. Shape may change; check contract.version.",
     source: "frontend/src/config/salon.ts",
   },
 

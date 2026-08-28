@@ -61,8 +61,9 @@ export const WALKTHROUGH: readonly WalkthroughFrame[] = [
 /**
  * The frames span Arrival and Services together, so the walk keeps moving
  * while the service cards arrive rather than freezing on the last interior.
+ * Tracks the end of the Services beat in lib/stage.ts.
  */
-export const WALKTHROUGH_RANGE = [0, 0.35] as const;
+export const WALKTHROUGH_RANGE = [0, 0.3] as const;
 
 /** Cross-fade overlap, in global progress units. Must be under half a segment. */
 export const WALKTHROUGH_FADE = 0.02;

@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 
 from app import config
-from app.adapters import whatsapp
+from app.adapters import catalogue, whatsapp
 from app.core import bookings, engine
 
 logging.basicConfig(
@@ -68,6 +68,9 @@ async def health() -> dict[str, object]:
 # --------------------------------------------------------------------------- #
 @app.post("/api/chat")
 async def api_chat(payload: ChatRequest) -> dict[str, object]:
+    # No-op until the TTL expires, and a failure keeps the bundled snapshot,
+    # so this can sit on the request path without risking the reply.
+    await catalogue.refresh_if_stale()
     result = await engine.handle(
         payload.message,
         payload.session_id,

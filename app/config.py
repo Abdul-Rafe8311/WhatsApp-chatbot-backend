@@ -67,84 +67,26 @@ BOOKING_STATUSES: Final[list[str]] = ["Pending", "Confirmed", "Cancelled"]
 # --------------------------------------------------------------------------- #
 # Salon knowledge base
 # --------------------------------------------------------------------------- #
-@dataclass(frozen=True)
-class Service:
-    name: str
-    price_pkr: int
-    duration_min: int
-    aliases: tuple[str, ...] = field(default_factory=tuple)
-
-
-SERVICES: Final[tuple[Service, ...]] = (
-    Service("Haircut", 1500, 45, ("haircut", "hair cut", "cut", "baal", "baal katwana", "hair")),
-    Service("Hair Color", 6000, 120, ("color", "colour", "hair color", "hair colour", "dye", "rang")),
-    Service("Blow Dry", 2000, 40, ("blow dry", "blowdry", "blow-dry", "styling")),
-    Service("Facial", 3500, 60, ("facial", "face", "clean up", "cleanup", "chehra")),
-    Service("Manicure", 2500, 45, ("manicure", "mani", "nails", "nakhun")),
-    Service("Pedicure", 3000, 60, ("pedicure", "pedi", "feet", "paon")),
-    Service("Threading", 500, 15, ("threading", "thread", "eyebrows", "brows", "abru")),
-    Service("Waxing", 4000, 60, ("waxing", "wax")),
-    Service("Bridal Makeup", 35000, 180, ("bridal", "bridal makeup", "dulhan", "shadi", "wedding")),
-    Service("Party Makeup", 12000, 90, ("party makeup", "party", "makeup", "make up", "mekap")),
-    Service("Hair Spa", 4500, 75, ("hair spa", "spa", "treatment", "keratin")),
-)
+# The catalogue used to live here as a hardcoded tuple. It drifted from the
+# website — GlowDesk's haircuts and facials in Lahore against Sonia's bridal
+# work in Sargodha — so a bride asking about her barat was quoted Party Makeup.
+#
+# It now lives in one place: frontend/src/config/salon.ts, published as
+# /api/services.json and read by app.adapters.catalogue. Nothing about the
+# salon's services, prices, address or hours belongs in this file any more.
+#
+# SALON_NAME stays because it is also the API title and the /health payload,
+# and it must resolve before any network call has happened.
 
 SALON_NAME: Final[str] = os.getenv("SALON_NAME") or "Sonia's Makeup Salon"
-SALON_ADDRESS: Final[str] = (
-    os.getenv("SALON_ADDRESS")
-    or "Shop 12, Ground Floor, Gulberg Galleria, Main Boulevard, Gulberg III, Lahore"
+
+# Where the published contract lives. Empty disables refreshing, leaving the
+# bundled snapshot — which is what runs in tests and offline.
+SERVICES_JSON_URL: Final[str] = os.getenv("SERVICES_JSON_URL", "").strip()
+CATALOGUE_TTL_SECONDS: Final[int] = int(os.getenv("CATALOGUE_TTL_SECONDS") or 900)
+CATALOGUE_TIMEOUT_SECONDS: Final[float] = float(
+    os.getenv("CATALOGUE_TIMEOUT_SECONDS") or 4
 )
-SALON_PHONE: Final[str] = os.getenv("SALON_PHONE") or "+92 300 1234567"
-SALON_HOURS: Final[str] = "Monday to Saturday 11:00 AM - 9:00 PM. Sunday closed."
-SALON_PAYMENT: Final[str] = "Cash, debit/credit card, and JazzCash or Easypaisa transfer."
-SALON_PARKING: Final[str] = "Free covered basement parking for customers, entrance from Main Boulevard."
-SALON_EXTRAS: Final[str] = (
-    "Walk-ins welcome but appointments get priority. Ladies only. "
-    "Bridal bookings need 50% advance."
-)
-
-
-def services_block() -> str:
-    """Human-readable price list used inside the system prompt."""
-    return "\n".join(
-        f"- {s.name}: PKR {s.price_pkr:,} ({s.duration_min} min)" for s in SERVICES
-    )
-
-
-def service_names() -> list[str]:
-    return [s.name for s in SERVICES]
-
-
-def find_service(text: str) -> str | None:
-    """Match free text against the service catalogue. Longest alias wins."""
-    low = text.lower()
-    best: tuple[int, str] | None = None
-    for svc in SERVICES:
-        for alias in (svc.name.lower(), *svc.aliases):
-            if alias in low and (best is None or len(alias) > best[0]):
-                best = (len(alias), svc.name)
-    return best[1] if best else None
-
-
-def service_by_name(name: str) -> Service | None:
-    for svc in SERVICES:
-        if svc.name.lower() == (name or "").lower():
-            return svc
-    return None
-
-
-KNOWLEDGE_BASE: Final[str] = f"""\
-Salon name: {SALON_NAME}
-Address: {SALON_ADDRESS}
-Phone: {SALON_PHONE}
-Opening hours: {SALON_HOURS}
-Payment methods: {SALON_PAYMENT}
-Parking: {SALON_PARKING}
-Other: {SALON_EXTRAS}
-
-Services and prices (PKR):
-{services_block()}
-"""
 
 
 # --------------------------------------------------------------------------- #

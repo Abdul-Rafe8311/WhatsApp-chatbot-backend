@@ -19,12 +19,33 @@ export type Beat = {
 };
 
 export const BEATS = [
-  { id: "arrival", label: "Arrival", range: [0, 0.15] },
-  { id: "services", label: "Services", range: [0.15, 0.35] },
-  { id: "gallery", label: "Gallery", range: [0.35, 0.55] },
-  { id: "booking", label: "Booking", range: [0.55, 0.75] },
-  { id: "contact", label: "Contact", range: [0.75, 1] },
+  { id: "arrival", label: "Arrival", range: [0, 0.12] },
+  { id: "services", label: "Services", range: [0.12, 0.3] },
+  { id: "gallery", label: "Gallery", range: [0.3, 0.48] },
+  { id: "meet", label: "Meet Sonia", range: [0.48, 0.62] },
+  { id: "booking", label: "Booking", range: [0.62, 0.8] },
+  { id: "contact", label: "Contact", range: [0.8, 1] },
 ] as const satisfies readonly Beat[];
+
+/** A beat by id, so a component never depends on its index in the score. */
+export function beat(id: BeatId): Beat {
+  const found = BEATS.find((b) => b.id === id);
+  if (!found) throw new Error(`stage: no beat "${id}"`);
+  return found;
+}
+
+/**
+ * A point inside a beat, as a fraction of its width.
+ *
+ * Beats express their internal timing this way rather than as absolute
+ * progress numbers, so re-spacing the score — which happened when Meet Sonia
+ * was added as a sixth section — moves every reveal with its beat instead of
+ * leaving hardcoded constants pointing into a neighbour.
+ */
+export function at(b: Beat, fraction: number): number {
+  const [start, end] = b.range;
+  return start + (end - start) * fraction;
+}
 
 export type BeatId = (typeof BEATS)[number]["id"];
 

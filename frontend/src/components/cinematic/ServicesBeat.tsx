@@ -5,9 +5,9 @@ import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { copy } from "@/config/copy";
 import { salon } from "@/config/salon";
 import { formatPrice } from "@/lib/price";
-import { BEATS } from "@/lib/stage";
+import { at, beat } from "@/lib/stage";
 
-const SERVICES_BEAT = BEATS[1];
+const SERVICES_BEAT = beat("services");
 
 /**
  * The cards shown at this station, by id, in walk order.
@@ -41,13 +41,16 @@ const CARDS = CARD_IDS.map((id) => {
   return service;
 });
 
-/** Entry window per card. Each lands on its own slice, none together. */
-const FIRST_IN = 0.165;
-const STAGGER = 0.018;
-const RISE = 0.03;
+/**
+ * Entry window per card, as fractions of the beat so re-spacing the score
+ * moves them all together. Each card lands on its own slice, none together.
+ */
+const FIRST_IN = at(SERVICES_BEAT, 0.25);
+const STAGGER = (SERVICES_BEAT.range[1] - SERVICES_BEAT.range[0]) * 0.09;
+const RISE = (SERVICES_BEAT.range[1] - SERVICES_BEAT.range[0]) * 0.16;
 /** Everything clears before the Gallery beat takes the frame. */
-const HOLD_UNTIL = 0.325;
-const CLEAR_BY = 0.348;
+const HOLD_UNTIL = at(SERVICES_BEAT, 0.88);
+const CLEAR_BY = at(SERVICES_BEAT, 0.99);
 
 export function ServicesBeat({ progress }: { progress: MotionValue<number> }) {
   const [start] = SERVICES_BEAT.range;
@@ -55,17 +58,17 @@ export function ServicesBeat({ progress }: { progress: MotionValue<number> }) {
   // The scrim and heading lead the cards in.
   const scrimOpacity = useTransform(
     progress,
-    [start - 0.02, start + 0.02, HOLD_UNTIL, CLEAR_BY],
+    [start - 0.015, at(SERVICES_BEAT, 0.1), HOLD_UNTIL, CLEAR_BY],
     [0, 1, 1, 0],
   );
   const headingOpacity = useTransform(
     progress,
-    [start - 0.005, start + 0.025, HOLD_UNTIL, CLEAR_BY],
+    [start - 0.005, at(SERVICES_BEAT, 0.14), HOLD_UNTIL, CLEAR_BY],
     [0, 1, 1, 0],
   );
   const headingY = useTransform(
     progress,
-    [start - 0.005, start + 0.025],
+    [start - 0.005, at(SERVICES_BEAT, 0.14)],
     ["18px", "0px"],
   );
 
