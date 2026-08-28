@@ -15,17 +15,17 @@ const SERVICES_BEAT = BEATS[1];
  * a card that silently disappears. Every entry resolves against salon.ts, so
  * nothing on screen is written for this page.
  *
- * NOTE: the brief asked for "bridal makeup" as a seventh card. There is no
- * such service — Bridal is a *category* covering the four wedding days below
- * (plus Engagement). Rather than invent an entry, the category's own note
- * from copy.services.groupNotes carries that idea as the beat's lead line.
- * "Hair styling" resolves to the real entry "Haircut & Styling".
+ * NOTE: "bridal makeup" is not a service — Bridal is a *category* covering the
+ * four wedding days plus Engagement. Rather than invent an entry, the
+ * category's own note from copy.services.groupNotes carries that idea as the
+ * beat's lead line. "Hair styling" resolves to "Haircut & Styling".
  */
 const CARD_IDS = [
   "mehndi",
   "nikah",
   "barat",
   "walima",
+  "engagement",
   "balayage",
   "haircut",
 ] as const;

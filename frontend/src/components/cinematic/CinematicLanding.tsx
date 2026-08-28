@@ -18,6 +18,7 @@ import { ScrollDebug } from "@/components/cinematic/ScrollDebug";
 import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
 import { Arrival } from "@/components/cinematic/Arrival";
 import { ServicesBeat } from "@/components/cinematic/ServicesBeat";
+import { GalleryBeat } from "@/components/cinematic/GalleryBeat";
 
 /**
  * SCAFFOLD — structure only, no styling yet.
@@ -107,10 +108,11 @@ export function CinematicLanding({
 
             <Arrival progress={smoothed} />
             <ServicesBeat progress={smoothed} />
+            <GalleryBeat progress={smoothed} />
 
-            {/* Not yet built. Gallery is next. */}
+            {/* Not yet built. Booking is next. */}
             {BEATS.filter(
-              (b) => !["arrival", "services", "contact"].includes(b.id),
+              (b) => !["arrival", "services", "gallery", "contact"].includes(b.id),
             ).map((beat) => (
               <BeatPanel key={beat.id} beat={beat} progress={smoothed} />
             ))}
