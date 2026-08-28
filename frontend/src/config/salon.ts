@@ -13,8 +13,24 @@
  *      without the demo label showing.
  */
 
-/** Rendered wherever a price is not confirmed. Never substitute a figure. */
+/** Rendered wherever a price is not set. */
 export const PRICE_ON_REQUEST = "On request" as const;
+
+/**
+ * PRICES ARE INDICATIVE MARKET ESTIMATES, NOT THE CLIENT'S RATES.
+ *
+ * Every service carries priceEstimated: true. These figures are typical
+ * Pakistani rates for a premium regional bridal salon, added so the demo
+ * does not read as an empty price list in front of the owner. The client
+ * has not quoted any of them.
+ *
+ * Two things follow. The site labels them as guide prices rather than
+ * presenting them as fact, and /api/services.json carries the same flag so
+ * the booking agent quotes them as approximate and offers to confirm.
+ *
+ * Replace with real rates and set priceEstimated: false per service.
+ */
+export const PRICE_CURRENCY = "PKR" as const;
 
 export const salon = {
   info: {
@@ -40,6 +56,7 @@ export const salon = {
     instagram: "https://www.instagram.com/soniasmakeupsalon/",  // CONFIRMED
     instagramFollowers: "49.9K",                // CONFIRMED (read from profile)
     instagramVerified: true,                    // CONFIRMED (verified badge on profile)
+    instagramPosts: "1,352",                    // CONFIRMED (post count on profile)
     facebook: "https://www.facebook.com/soniasmakeupsalon/",    // CONFIRMED
 
     credentials: [
@@ -52,12 +69,15 @@ export const salon = {
      * a broken <img>. Drop a file in public/images/ and set the path here;
      * alt text is required alongside it. See docs/design-plan.md §5.
      */
-    heroImage: null as string | null,          // TODO: /images/hero-bridal.webp
-    heroImageAlt: null as string | null,
-    aboutImage: null as string | null,         // TODO: /images/about-sonia.webp
-    aboutImageAlt: null as string | null,
-    locationImage: null as string | null,      // TODO: /images/location-salon.webp
-    locationImageAlt: null as string | null,
+    heroImage: "/images/hero.webp" as string | null,
+    heroImageAlt:
+      "The salon's carved wooden Sonia's sign, raised lettering on a gold-washed panel, banked with cream roses" as string | null,
+    aboutImage: "/images/about-sonia.webp" as string | null,
+    aboutImageAlt:
+      "Sonia Shabbir in a deep pink kurta and sequinned dupatta, long caramel-balayaged hair worn loose, wearing a pearl necklace with an ornate pendant" as string | null,
+    locationImage: "/images/location-salon.webp" as string | null,
+    locationImageAlt:
+      "The salon shopfront in Sargodha: gold Sonia's Makeup Salon lettering on a black fascia above a grey stone facade" as string | null,
 
     parkingNote: "",                           // TODO: ask client
     paymentMethods: [],                        // TODO: ask client — likely Cash, Easypaisa, JazzCash
@@ -80,12 +100,14 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Colourful mehndi-day makeup with floral jewellery styling.",
-      priceMin: null,                          // TODO: ask client
-      priceMax: null,
+      priceMin: 15000,
+      priceMax: 25000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,                   // TODO: ask client
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/mehndi.webp" as string | null,
+      imageAlt:
+        "Mehndi-day bridal look: mustard-green embroidered outfit and gold-bordered dupatta, pink fresh flowers braided through a side plait, green and gold kundan jewellery" as string | null,
     },
     {
       id: "nikah",
@@ -93,12 +115,14 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Understated bridal makeup and hair for the nikah ceremony.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 18000,
+      priceMax: 30000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/bridal-04.webp" as string | null,
+      imageAlt:
+        "Bridal look in a bottle-green lehenga embroidered with pink and coral florals, a sage net dupatta, layered kundan and gold-bead necklaces, with deep red henna on the hands" as string | null,
     },
     {
       id: "barat",
@@ -106,12 +130,14 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Full bridal makeup, hair styling and dupatta setting for the barat.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 30000,
+      priceMax: 55000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/barat.webp" as string | null,
+      imageAlt:
+        "Barat bridal look: deep red and gold hand-embroidered lehenga with a rose-gold dupatta, layered gold choker and jhumka earrings, with deep henna on the hands" as string | null,
     },
     {
       id: "walima",
@@ -119,12 +145,14 @@ export const salon = {
       category: "Bridal",
       featured: true,
       description: "Softer, camera-ready bridal look with hair styling for the walima.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 25000,
+      priceMax: 45000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
-      image: null as string | null,
-      imageAlt: null as string | null,
+      image: "/images/portfolio/walima.webp" as string | null,
+      imageAlt:
+        "Walima bridal look: pale ice-blue outfit worked in silver and pearl with a matching net dupatta over the head, a fine gold necklace, and warm bronze smoky eyes" as string | null,
     },
     {
       id: "engagement",
@@ -132,8 +160,9 @@ export const salon = {
       category: "Bridal",
       featured: false,
       description: "Makeup and hair for the engagement.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 12000,
+      priceMax: 20000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -147,8 +176,9 @@ export const salon = {
       category: "Party",
       featured: false,
       description: "Event makeup for guests, family and formal occasions.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 5000,
+      priceMax: 10000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -162,8 +192,9 @@ export const salon = {
       category: "Hair",
       featured: true,                          // they call themselves balayage experts — lead with it
       description: "Hand-painted colour that grows out softly, matched to your skin tone.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 10000,
+      priceMax: 20000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -175,8 +206,9 @@ export const salon = {
       category: "Hair",
       featured: false,
       description: "Foil highlights and lowlights.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 7000,
+      priceMax: 15000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -188,8 +220,9 @@ export const salon = {
       category: "Hair",
       featured: false,
       description: "Cut, blow-dry and styling.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 1500,
+      priceMax: 3500,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -201,8 +234,9 @@ export const salon = {
       category: "Hair",
       featured: false,
       description: "Keratin, protein and repair treatments.", // TODO: confirm which they offer
-      priceMin: null,
-      priceMax: null,
+      priceMin: 4000,
+      priceMax: 9000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -216,8 +250,9 @@ export const salon = {
       category: "Skin",
       featured: false,
       description: "Cleansing and brightening facials.", // TODO: confirm the range they offer
-      priceMin: null,
-      priceMax: null,
+      priceMin: 2500,
+      priceMax: 6000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -229,8 +264,9 @@ export const salon = {
       category: "Skin",
       featured: false,
       description: "Eyebrow shaping and face threading.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 300,
+      priceMax: 600,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -242,8 +278,9 @@ export const salon = {
       category: "Skin",
       featured: false,
       description: "Full-body and partial waxing.",
-      priceMin: null,
-      priceMax: null,
+      priceMin: 2500,
+      priceMax: 5000,
+      priceEstimated: true,
       priceNote: PRICE_ON_REQUEST,
       durationMinutes: null,
       image: null as string | null,
@@ -270,6 +307,113 @@ export const salon = {
       { day: "Saturday",  open: null, close: null, closed: null },
       { day: "Sunday",    open: null, close: null, closed: null },
     ],
+  },
+  /**
+   * REDUCED DEMO SET. Six slots, not the twenty-four the full build plans.
+   * This is a pitch shown to the salon owner, and thirty-seven photographs
+   * is more than anyone will source before that meeting.
+   *
+   * The full manifest is in docs/design-plan.md R4 and R5. Scaling back up
+   * is adding entries here: no component change, no CSS change. The section
+   * derives its column count, its filter and which tiles to show from
+   * whatever this array holds.
+   *
+   * Three Bridal slots are filled. Party and Hair are empty, so they render
+   * nothing and the filter hides itself — a filter whose buttons lead to
+   * empty grids is worse than no filter.
+   */
+  portfolio: {
+    /** Filter order. These are portfolio groupings, not service categories. */
+    filters: ["Bridal", "Party", "Hair"] as const,
+    items: [
+      {
+        id: "bridal-01",
+        category: "Bridal",
+        ratio: "4:5",
+        image: "/images/portfolio/mehndi.webp" as string | null,
+        imageAlt:
+          "Mehndi-day bridal look: mustard-green embroidered outfit and gold-bordered dupatta, pink fresh flowers braided through a side plait, green and gold kundan maang tikka, jhumka earrings and choker, with pink blush and warm smoky eyes" as string | null,
+      },
+      {
+        id: "bridal-02",
+        category: "Bridal",
+        ratio: "4:5",
+        image: "/images/portfolio/barat.webp" as string | null,
+        imageAlt:
+          "Barat bridal look: deep red and gold hand-embroidered lehenga with a rose-gold dupatta, layered gold choker, jhumka earrings and a red-stone maang tikka, with deep henna on the hands" as string | null,
+      },
+      {
+        id: "bridal-03",
+        category: "Bridal",
+        ratio: "1:1",
+        image: "/images/portfolio/walima.webp" as string | null,
+        imageAlt:
+          "Walima bridal look: pale ice-blue outfit worked in silver and pearl with a matching net dupatta over the head, a fine gold necklace, and warm bronze smoky eyes" as string | null,
+      },
+      {
+        id: "bridal-04",
+        category: "Bridal",
+        ratio: "4:5",
+        image: "/images/portfolio/bridal-04.webp" as string | null,
+        imageAlt:
+          "Bridal look in a bottle-green lehenga embroidered with pink and coral florals, a sage net dupatta, layered kundan and gold-bead necklaces, a kundan maang tikka and green-drop jhumka earrings, with deep red henna on the hands" as string | null,
+      },
+      { id: "party-01", category: "Party", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+      { id: "party-02", category: "Party", ratio: "1:1", image: null as string | null, imageAlt: null as string | null },
+      { id: "hair-01", category: "Hair", ratio: "4:5", image: null as string | null, imageAlt: null as string | null },
+    ],
+  },
+
+  /**
+   * CUT FOR THE DEMO. Empty, so neither the section nor its nav entry
+   * renders — the same gate every other unconfirmed section uses.
+   *
+   * No files were allocated to it, so it would have been nine empty
+   * placeholders under a heading, duplicating the portfolio job with none
+   * of its content. The follower count, post count and follow link already
+   * appear in Meet Sonia, so nothing is lost.
+   */
+  instagramStrip: {
+    items: [] as ReadonlyArray<{
+      id: string;
+      image: string | null;
+      imageAlt: string | null;
+    }>,
+  },
+
+  /**
+   * Testimonials. Facebook shows 84% recommend from 5 reviews, which is real
+   * but too thin to quote from without permission.
+   *
+   * verified stays false until real quotes are supplied, and the section does
+   * not render at all while it is — the same gate as hours. Nothing here is
+   * ever invented.
+   */
+  testimonials: {
+    verified: false,
+    items: [] as ReadonlyArray<{
+      id: string;
+      quote: string;
+      name: string;
+      event: string | null;
+    }>,
+  },
+
+  /**
+   * Before & after. A plain two-up comparison, no drag slider — the slider is
+   * a lot of JavaScript for a section we may not have paired photographs for.
+   * Renders only when verified is true and pairs exist.
+   */
+  beforeAfter: {
+    verified: false,
+    pairs: [] as ReadonlyArray<{
+      id: string;
+      label: string;
+      beforeImage: string | null;
+      beforeAlt: string | null;
+      afterImage: string | null;
+      afterAlt: string | null;
+    }>,
   },
 } as const;
 

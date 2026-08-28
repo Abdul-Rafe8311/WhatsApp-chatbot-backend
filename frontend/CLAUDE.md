@@ -18,11 +18,18 @@ All three will eventually share one database. **This site does not talk to the a
 
 Do not build these. If a change seems to require one, stop and ask:
 
-- Any booking form, date picker, or calendar on the site (WhatsApp *is* the booking flow)
+- **Any booking form, date picker, time field, service selector, or name/phone
+  input.** WhatsApp *is* the booking flow. Reaffirmed in Revision 4 against a
+  proposed booking section, for two reasons worth keeping: a form would split
+  booking data across two systems, so the site and the agent would each hold
+  half a booking and neither would be authoritative; and it would compete with
+  the WhatsApp agent this entire project exists to demonstrate. Every booking
+  path on this site goes through <WhatsAppLink>.
 - Login, accounts, or admin UI
 - Payments or pricing checkout
 - CMS integration
-- Blog, reviews system, or newsletter signup
+- Blog, reviews system, or newsletter signup (testimonials are static config,
+  gated behind a verified flag — never a review submission form)
 - Analytics, tracking pixels, cookie banners
 - Multi-language or i18n framework (site is English only)
 

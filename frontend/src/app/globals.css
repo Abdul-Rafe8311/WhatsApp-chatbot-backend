@@ -15,6 +15,18 @@
   --color-fg: var(--fg);
   --color-label: var(--label);
   --color-gold: var(--gold);
+  /* Text and scrim over a photograph. Identical in both themes: the layer
+     underneath is the image, not the page, so the theme has no bearing on
+     what is legible. */
+  --color-on-image: #f7f2ea;
+  /* The light theme's gold is a deep bronze for contrast on paper; over a
+     dark scrim it disappears. This is the brighter gold, fixed in both
+     themes for the same reason --color-on-image is. */
+  --color-gold-on-image: #be9b4d;
+  /* The same ink the light theme uses for text, pinned. Needed as the label
+     colour when a CTA fills with gold over a photograph, where --surface
+     would resolve to paper and fail contrast. */
+  --color-scrim-ink: #170e11;
 
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-body: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
@@ -166,6 +178,78 @@
   /* The gold hairline seam that stitches one colour panel to the next. */
   .seam {
     border-top: 1px solid var(--color-gold);
+  }
+  /* ---- Hero scrim -------------------------------------------------------
+     Must hold text over a light photograph as well as a dark one. The worst
+     case is pure white under the strongest stop: white at 22% through a 78%
+     black scrim composites to ~#383838, which carries --color-on-image well
+     past AA. Bottom-weighted because the headline sits low in the frame. */
+  .hero-scrim {
+    /* Directional, and sized from measurement rather than taste.
+       "to top", so 0% is the bottom edge.
+
+       The constraint: the brightest pixels in this photograph are blown-out
+       white roses, and cream text over pure white needs the scrim at 56%
+       alpha to clear AA. The headline is four lines of display type — at
+       1440 it spans y 0.33 to 0.69 of the hero, and the credential runs to
+       0.78 — so the band that must hold 56%+ is the lower two thirds.
+
+       Hence: held above 0.64 through the whole text band, then a fast fall
+       to fully transparent by the top fifth. Unlike the previous scrim,
+       which never reached zero and sat at 24% over the entire frame, the top
+       of the photograph is now completely untouched. */
+    background-image: linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.76) 0%,
+      rgb(0 0 0 / 0.72) 45%,
+      rgb(0 0 0 / 0.66) 68%,
+      rgb(0 0 0 / 0.30) 78%,
+      rgb(0 0 0 / 0) 88%
+    );
+  }
+
+  /* ---- Portfolio masonry ------------------------------------------------
+     CSS columns rather than a JS masonry library: no runtime, no reflow
+     pass, and it degrades to a single column at 375px on its own. */
+  .pf-grid {
+    column-gap: 0.75rem;
+  }
+  .pf-grid > li {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .pf-grid { columns: 2; column-gap: 1rem; }
+    .pf-grid > li { margin-bottom: 1rem; }
+  }
+  @media (min-width: 1024px) {
+    .pf-grid { columns: 3; }
+    /* Too few tiles to fill three columns reads as a thin row rather than a
+       gallery. The modifier is applied from the item count, not hardcoded. */
+    .pf-grid.pf-grid--few { columns: 2; }
+  }
+
+  /* ---- Portfolio filter -------------------------------------------------
+     Radio inputs plus sibling selectors. Zero JavaScript, keyboard operable
+     for free, and it works before hydration. The per-category rules are
+     generated from the config in <Portfolio>, so adding a filter needs no
+     CSS change here. */
+  .pf-filter-label {
+    cursor: pointer;
+  }
+  .pf-input:focus-visible + .pf-filter-label {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ---- Lightbox ---------------------------------------------------------
+     :target driven. No JavaScript, and the browser Back button closes it,
+     which is the behaviour phone users already expect. */
+  .lb {
+    display: none;
+  }
+  .lb:target {
+    display: flex;
   }
 }
 
