@@ -28,28 +28,34 @@ function ServiceRow({ service }: { service: Service }) {
       <WhatsAppLink
         prefill={copy.cta.servicePrefill(service.name)}
         ariaLabel={copy.cta.serviceAriaLabel(service.name)}
-        // w-full and text-left are load-bearing, not cosmetic. While the
-        // WhatsApp number is unset this renders as a <button>, and a button
-        // shrink-wraps to its content and centres its text by default — so
-        // justify-between had nothing to push against and every row's name
-        // landed at a different indent.
-        className="flex w-full flex-col gap-1 py-5 text-left transition-colors duration-200 hover:text-gold sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+        /**
+         * A two-column grid, not flex, so the edges are structural rather
+         * than emergent: column 1 always starts at the container's left edge
+         * and column 2 always ends at its right, whatever the name or price
+         * happens to be. The description sits in column 1 of row 2, so it
+         * shares the name's left edge exactly.
+         *
+         * w-full and text-left are load-bearing. While the WhatsApp number is
+         * unset this renders as a <button>, and a button shrink-wraps to its
+         * content and centres its text — which is what made every row's name
+         * land at a different indent.
+         */
+        className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6 gap-y-1 py-4 text-left transition-colors duration-200 hover:text-gold"
       >
-        <span className="flex min-w-0 flex-col gap-1">
-          <span className="type-card-title">{service.name}</span>
-          {service.description && (
-            <span className="type-body text-fg/70">{service.description}</span>
-          )}
+        <span className="type-card-title">{service.name}</span>
+
+        {/* Sample prices — see salon.pricesAreSample. A null min still renders
+            "On request"; formatPrice never invents a figure. Tabular figures
+            so the digits line up down the column. */}
+        <span className="type-data text-right text-fg/65 tabular-nums">
+          {formatPrice(service)}
         </span>
 
-        {/* Guide prices, flagged priceEstimated in the config. A null min
-            still renders "On request" — formatPrice never invents a figure. */}
-        <span className="type-data shrink-0 text-fg/65 sm:text-right">
-          {formatPrice(service)}
-          {service.durationMinutes !== null && (
-            <span className="block">{service.durationMinutes} min</span>
-          )}
-        </span>
+        {service.description && (
+          <span className="type-body col-start-1 text-fg/70">
+            {service.description}
+          </span>
+        )}
       </WhatsAppLink>
     </li>
   );
@@ -59,7 +65,7 @@ export default function ServicesPage() {
   return (
     <main className="flex flex-1 flex-col">
       <section className="bg-surface">
-        <div className="wrap flex flex-col gap-12 py-16 sm:py-24">
+        <div className="wrap flex flex-col gap-14 py-16 sm:py-24">
           <div className="flex flex-col gap-3">
             <h1 className="type-h2">{copy.services.pageHeading}</h1>
             <p className="type-body text-fg/70">{copy.services.pageIntro}</p>
@@ -73,8 +79,8 @@ export default function ServicesPage() {
             const note = copy.services.groupNotes[category];
 
             return (
-              <div key={category} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
+              <div key={category} className="flex flex-col gap-2">
+                <div className="flex flex-col gap-0.5 pb-1">
                   <h2 className="type-meta text-label">{category}</h2>
                   {note && <p className="type-meta text-fg/65">{note}</p>}
                 </div>

@@ -30,10 +30,14 @@ const payload = {
   contract: {
     version: 1,
     status: "temporary",
-    pricesAreEstimates: true,
-    note: "PRICES ARE INDICATIVE MARKET ESTIMATES, not rates quoted by the salon — every service has priceEstimated true. Quote them as approximate and offer to confirm. Generated from the website's local config. This is a stopgap until the shared database lands, at which point both the site and the agent should read from that instead. Shape may change; check contract.version.",
+    note: "PRICES ARE SAMPLE DATA, not rates quoted by the salon — see pricesAreSample at the root. Present them as indicative and offer to confirm. Generated from the website's local config. This is a stopgap until the shared database lands, at which point both the site and the agent should read from that instead. Shape may change; check contract.version.",
     source: "frontend/src/config/salon.ts",
   },
+
+  // TRUE = every figure below is sample data, NOT quoted by the salon.
+  // Present prices as indicative and offer to confirm; never commit the
+  // client to one. See salon.pricesAreSample in the config.
+  pricesAreSample: salon.pricesAreSample,
 
   // --- salon ---------------------------------------------------------------
   salon: {
@@ -75,9 +79,6 @@ const payload = {
     priceMax: s.priceMax,
     priceNote: s.priceNote,
     priceCurrency: "PKR",
-    // TRUE = an indicative market rate, NOT quoted by the salon. Present it
-    // as approximate and offer to confirm; never commit the client to it.
-    priceEstimated: s.priceEstimated ?? false,
     durationMinutes: s.durationMinutes,
   })),
 
@@ -99,10 +100,9 @@ writeFileSync(
   JSON.stringify(payload, null, 2) + "\n",
 );
 
-const nullPrices = payload.services.filter((s) => s.priceMin === null).length;
-const estimated = payload.services.filter((s) => s.priceEstimated).length;
+const onRequest = payload.services.filter((s) => s.priceMin === null).length;
 console.log(
   `generate-api: ${payload.services.length} services ` +
-    `(${nullPrices} unknown price, ${estimated} estimated), ` +
+    `(${onRequest} quoted per booking), pricesAreSample=${payload.pricesAreSample}, ` +
     `hours.verified=${payload.hours.verified}`,
 );
