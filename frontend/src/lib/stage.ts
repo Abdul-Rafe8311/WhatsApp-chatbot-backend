@@ -57,7 +57,37 @@ export type BeatId = (typeof BEATS)[number]["id"];
  * classes rather than a JS media query so the height is correct on first paint
  * and never needs a re-render to fix itself.
  */
-export const STAGE_HEIGHT_CLASS = "h-[350vh] md:h-[500vh]";
+export const STAGE_HEIGHT_CLASS =
+  "h-[350vh] md:h-[500vh] [--stage-range:250vh] md:[--stage-range:400vh]";
+
+/**
+ * Scrollable distance inside the container, as a CSS length.
+ *
+ * The container is 350/500vh but only (height - 100vh) of that is scroll,
+ * because the sticky stage occupies the last viewport. Anchor targets are
+ * positioned against this, not against the container height, or every jump
+ * would overshoot by a fifth.
+ */
+export const STAGE_RANGE_VAR = "var(--stage-range)";
+
+/**
+ * Which beat each nav anchor should land on.
+ *
+ * lib/sections.ts guarantees a nav link cannot exist without a section that
+ * renders. The cinematic page broke that: its sections are beats inside a
+ * sticky stage, not elements with ids, so #work, #about and #services pointed
+ * at nothing and the links silently did nothing. This is the map that restores
+ * it — an id here must correspond to a section in the registry, and a beat
+ * that exists above.
+ *
+ * "hours" is absent on purpose: that section renders for real in normal flow
+ * after the stage releases, and already carries its own id.
+ */
+export const ANCHOR_BEATS: Readonly<Record<string, BeatId>> = {
+  work: "gallery",
+  about: "meet",
+  services: "services",
+};
 
 /**
  * Where a beat sits as a fraction, for the debug overlay's ruler.

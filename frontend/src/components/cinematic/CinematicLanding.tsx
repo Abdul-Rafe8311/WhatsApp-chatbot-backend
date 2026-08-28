@@ -2,7 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { STAGE_HEIGHT_CLASS, beat } from "@/lib/stage";
+import { ANCHOR_BEATS, STAGE_HEIGHT_CLASS, STAGE_RANGE_VAR, at, beat } from "@/lib/stage";
 import { useIsCompact, usePrefersReducedMotion } from "@/lib/viewport";
 import { WalkthroughBackground } from "@/components/cinematic/WalkthroughBackground";
 import { Arrival } from "@/components/cinematic/Arrival";
@@ -69,17 +69,38 @@ export function CinematicLanding({
   const stageOpacity = useTransform(smoothed, [beat("contact").range[0], 0.97], [1, 0]);
 
   if (reducedMotion) {
-    return (
-      <>
-        {fallback}
-        {contact}
-      </>
-    );
+    // `contact` is deliberately not rendered here. The stacked fallback is the
+    // full section list and already includes the hours section, so adding it
+    // again would put two elements with id="hours" in the document.
+    return <>{fallback}</>;
   }
 
   return (
     <>
       <div ref={containerRef} className={`relative ${STAGE_HEIGHT_CLASS}`}>
+        {/*
+          Anchor targets for the nav.
+
+          A beat is not an element with an id — it is a range of scroll — so a
+          plain #id link had nothing to jump to and did nothing at all. These
+          are zero-height markers parked at the scroll offset that puts their
+          beat on screen, so a native anchor jump lands mid-beat and the
+          browser's own smooth scrolling does the work. No JS, no scroll
+          hijacking, and it still works with the page's back/forward history.
+
+          Offset is against the scrollable range, not the container height:
+          the sticky stage eats the last viewport, so using the full height
+          would overshoot every target.
+        */}
+        {Object.entries(ANCHOR_BEATS).map(([id, beatId]) => (
+          <div
+            key={id}
+            id={id}
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 h-px w-px"
+            style={{ top: `calc(${STAGE_RANGE_VAR} * ${at(beat(beatId), 0.4)})` }}
+          />
+        ))}
         <div className="sticky top-0 h-dvh overflow-hidden">
           <motion.div
             style={{ opacity: stageOpacity }}

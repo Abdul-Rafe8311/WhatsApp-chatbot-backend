@@ -6,11 +6,16 @@ export function SiteHeader() {
   return (
     <header className="bg-surface border-b border-gold">
       <div className="wrap flex items-center justify-between gap-4 py-4">
-        {/* The logo carries the accessible name via its alt text, so the link
+        {/* Home, not "#top". As a same-page anchor this did nothing but scroll
+            up, so from /services — the only other page — clicking the logo
+            left you on /services. A masthead logo is expected to go home from
+            anywhere, and on the home page "/" still lands at the top.
+
+            The logo carries the accessible name via its alt text, so the link
             needs no label of its own. The typeset <Wordmark> still holds the
             name in the footer, where there is room to read it. */}
         <a
-          href="#top"
+          href="/"
           className="flex items-center min-h-[44px] -my-2 py-2"
         >
           <SalonLogo />
